@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Call Filter",
-    "slug": "call-filter",
+    "slug": "android-call-filter",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
