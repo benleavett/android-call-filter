@@ -4,13 +4,18 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { initI18n } from "@/i18n";
+import { seedDefaultFilters } from "@/hooks/useSeedDefaults";
 import { Colors } from "@/constants/theme";
 
 export default function RootLayout() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    initI18n().then(() => setReady(true));
+    async function init() {
+      await initI18n();
+      await seedDefaultFilters();
+    }
+    init().then(() => setReady(true));
   }, []);
 
   if (!ready) {

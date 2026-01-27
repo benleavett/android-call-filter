@@ -1,15 +1,12 @@
-import { NativeModule, requireNativeModule } from "expo";
+import { NativeModule, requireOptionalNativeModule } from "expo";
 
 declare class CallScreeningModuleType extends NativeModule {
-  getPrefixes(): Promise<Array<Record<string, unknown>>>;
-  addPrefix(prefix: string, label: string): Promise<boolean>;
-  removePrefix(prefix: string): Promise<boolean>;
-  togglePrefix(prefix: string, enabled: boolean): Promise<boolean>;
+  syncPrefixes(json: string): Promise<void>;
   getCallLog(limit: number, offset: number): Promise<Array<Record<string, unknown>>>;
   clearCallLog(): Promise<void>;
-  getStats(): Promise<Record<string, unknown>>;
+  getCallLogStats(): Promise<Record<string, number>>;
   isServiceEnabled(): Promise<boolean>;
   requestServiceEnable(): Promise<boolean>;
 }
 
-export default requireNativeModule<CallScreeningModuleType>("CallScreening");
+export default requireOptionalNativeModule<CallScreeningModuleType>("CallScreening");

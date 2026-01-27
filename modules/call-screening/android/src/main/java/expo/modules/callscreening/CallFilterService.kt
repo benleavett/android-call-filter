@@ -26,14 +26,14 @@ class CallFilterService : CallScreeningService() {
         Log.d(TAG, "Incoming call from: $phoneNumber")
 
         val prefixManager = PrefixManager(applicationContext)
-        val matchedPrefix = prefixManager.matchesPrefix(phoneNumber)
+        val matchedFilter = prefixManager.matchesFilter(phoneNumber)
 
-        if (matchedPrefix != null) {
-            Log.d(TAG, "Matched prefix: $matchedPrefix — rejecting call")
+        if (matchedFilter != null) {
+            Log.d(TAG, "Matched filter: $matchedFilter — rejecting call")
 
             try {
                 val db = CallLogDatabase(applicationContext)
-                db.insertEntry(phoneNumber, matchedPrefix)
+                db.insertEntry(phoneNumber, matchedFilter)
                 db.close()
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to log blocked call", e)
@@ -41,7 +41,7 @@ class CallFilterService : CallScreeningService() {
 
             try {
                 NotificationHelper(applicationContext)
-                    .showBlockedCallNotification(phoneNumber, matchedPrefix)
+                    .showBlockedCallNotification(phoneNumber, matchedFilter)
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to show notification", e)
             }
@@ -55,7 +55,7 @@ class CallFilterService : CallScreeningService() {
 
             respondToCall(callDetails, response)
         } else {
-            Log.d(TAG, "No prefix match — allowing call")
+            Log.d(TAG, "No filter match — allowing call")
             respondToCall(callDetails, CallResponse.Builder().build())
         }
     }

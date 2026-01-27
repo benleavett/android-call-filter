@@ -1,56 +1,127 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import CallScreeningModule from "./src/CallScreeningModule";
 import type {
-  PrefixEntry,
+  FilterEntry,
   CallLogEntry,
   CallStats,
 } from "./src/CallScreening.types";
 
-export type { PrefixEntry, CallLogEntry, CallStats };
+export type { FilterEntry, CallLogEntry, CallStats };
 
-export async function getPrefixes(): Promise<PrefixEntry[]> {
-  const raw = await CallScreeningModule.getPrefixes();
-  return raw as unknown as PrefixEntry[];
+const native = CallScreeningModule;
+
+// ---------------------------------------------------------------------------
+// Filters — always stored in AsyncStorage (single code path).
+// After every mutation we sync to native SharedPreferences so the
+// CallFilterService can read them without the JS runtime.
+// ---------------------------------------------------------------------------
+
+const FILTERS_KEY = "call_filter_entries";
+
+async function syncToNative(entries: FilterEntry[]): Promise<void> {
+  if (native) {
+    await native.syncPrefixes(JSON.stringify(entries));
+  }
 }
 
-export async function addPrefix(
-  prefix: string,
-  label: string = ""
+export async function getFilters(): Promise<FilterEntry[]> {
+  const raw = await AsyncStorage.getItem(FILTERS_KEY);
+  return raw ? JSON.parse(raw) : [];
+}
+
+export async function addFilter(
+  filter: string,
+  label: string = "",
+  countryCode: string = ""
 ): Promise<boolean> {
-  return CallScreeningModule.addPrefix(prefix, label);
+  const entries = await getFilters();
+  if (entries.some((e) => e.filter === filter && e.countryCode === countryCode))
+    return false;
+  entries.push({
+    filter,
+    label,
+    countryCode,
+    enabled: true,
+    createdAt: Date.now(),
+  });
+  await AsyncStorage.setItem(FILTERS_KEY, JSON.stringify(entries));
+  await syncToNative(entries);
+  return true;
 }
 
-export async function removePrefix(prefix: string): Promise<boolean> {
-  return CallScreeningModule.removePrefix(prefix);
+export async function removeFilter(filter: string): Promise<boolean> {
+  const entries = await getFilters();
+  const filtered = entries.filter((e) => e.filter !== filter);
+  if (filtered.length === entries.length) return false;
+  await AsyncStorage.setItem(FILTERS_KEY, JSON.stringify(filtered));
+  await syncToNative(filtered);
+  return true;
 }
 
-export async function togglePrefix(
-  prefix: string,
+export async function toggleFilter(
+  filter: string,
   enabled: boolean
 ): Promise<boolean> {
-  return CallScreeningModule.togglePrefix(prefix, enabled);
+  const entries = await getFilters();
+  const entry = entries.find((e) => e.filter === filter);
+  if (!entry) return false;
+  entry.enabled = enabled;
+  await AsyncStorage.setItem(FILTERS_KEY, JSON.stringify(entries));
+  await syncToNative(entries);
+  return true;
 }
+
+// ---------------------------------------------------------------------------
+// Call log — only populated by the native CallFilterService.
+// ---------------------------------------------------------------------------
 
 export async function getCallLog(
   limit: number = 50,
   offset: number = 0
 ): Promise<CallLogEntry[]> {
-  const raw = await CallScreeningModule.getCallLog(limit, offset);
+  if (!native) return [];
+  const raw = await native.getCallLog(limit, offset);
   return raw as unknown as CallLogEntry[];
 }
 
 export async function clearCallLog(): Promise<void> {
-  return CallScreeningModule.clearCallLog();
+  if (!native) return;
+  await native.clearCallLog();
 }
+
+// ---------------------------------------------------------------------------
+// Stats — filter counts from AsyncStorage, call log counts from native.
+// ---------------------------------------------------------------------------
 
 export async function getStats(): Promise<CallStats> {
-  const raw = await CallScreeningModule.getStats();
-  return raw as unknown as CallStats;
+  const filters = await getFilters();
+
+  let totalFiltered = 0;
+  let todayCount = 0;
+  if (native) {
+    const logStats = await native.getCallLogStats();
+    totalFiltered = (logStats as Record<string, number>).totalFiltered ?? 0;
+    todayCount = (logStats as Record<string, number>).todayCount ?? 0;
+  }
+
+  return {
+    totalFiltered,
+    todayCount,
+    activeFilters: filters.filter((f) => f.enabled).length,
+    totalFilters: filters.length,
+  };
 }
 
+// ---------------------------------------------------------------------------
+// Service status — native only.
+// ---------------------------------------------------------------------------
+
 export async function isServiceEnabled(): Promise<boolean> {
-  return CallScreeningModule.isServiceEnabled();
+  if (!native) return false;
+  return native.isServiceEnabled();
 }
 
 export async function requestServiceEnable(): Promise<boolean> {
-  return CallScreeningModule.requestServiceEnable();
+  if (!native) return false;
+  return native.requestServiceEnable();
 }

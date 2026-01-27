@@ -9,28 +9,28 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import { PrefixItem } from "@/components/PrefixItem";
-import { AddPrefixSheet } from "@/components/AddPrefixSheet";
+import { FilterItem } from "@/components/FilterItem";
+import { AddFilterSheet } from "@/components/AddFilterSheet";
 import { EmptyState } from "@/components/EmptyState";
-import { usePrefixes } from "@/hooks/usePrefixes";
+import { useFilters } from "@/hooks/useFilters";
 import { Colors, Spacing, BorderRadius, Elevation } from "@/constants/theme";
 
-export default function PrefixesScreen() {
+export default function FiltersScreen() {
   const { t } = useTranslation();
-  const { prefixes, loading, refresh, add, remove, toggle } = usePrefixes();
+  const { filters, loading, refresh, add, remove, toggle } = useFilters();
   const [showAddSheet, setShowAddSheet] = useState(false);
 
   const handleDelete = useCallback(
-    (prefix: string) => {
+    (filter: string) => {
       Alert.alert(
-        t("prefixes.removeTitle"),
-        t("prefixes.removeMessage", { prefix }),
+        t("filters.removeTitle"),
+        t("filters.removeMessage", { filter }),
         [
           { text: t("common.cancel"), style: "cancel" },
           {
             text: t("common.remove"),
             style: "destructive",
-            onPress: () => remove(prefix),
+            onPress: () => remove(filter),
           },
         ]
       );
@@ -49,23 +49,23 @@ export default function PrefixesScreen() {
   return (
     <View style={styles.container}>
       <FlatList
-        data={prefixes}
-        keyExtractor={(item) => item.prefix}
+        data={filters}
+        keyExtractor={(item) => item.filter}
         renderItem={({ item }) => (
-          <PrefixItem
+          <FilterItem
             entry={item}
             onToggle={toggle}
             onDelete={handleDelete}
           />
         )}
         contentContainerStyle={
-          prefixes.length === 0 ? styles.emptyContent : undefined
+          filters.length === 0 ? styles.emptyContent : undefined
         }
         ListEmptyComponent={
           <EmptyState
             icon="filter-off-outline"
-            title={t("prefixes.emptyTitle")}
-            message={t("prefixes.emptyMessage")}
+            title={t("filters.emptyTitle")}
+            message={t("filters.emptyMessage")}
           />
         }
         refreshing={false}
@@ -79,7 +79,7 @@ export default function PrefixesScreen() {
         <MaterialCommunityIcons name="plus" size={24} color={Colors.onPrimary} />
       </Pressable>
 
-      <AddPrefixSheet
+      <AddFilterSheet
         visible={showAddSheet}
         onClose={() => setShowAddSheet(false)}
         onAdd={add}

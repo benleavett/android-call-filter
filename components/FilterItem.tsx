@@ -1,15 +1,15 @@
 import { View, Text, Switch, StyleSheet, Pressable } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Colors, Spacing, BorderRadius } from "@/constants/theme";
-import type { PrefixEntry } from "@/modules/call-screening";
+import type { FilterEntry } from "@/modules/call-screening";
 
-interface PrefixItemProps {
-  entry: PrefixEntry;
-  onToggle: (prefix: string, enabled: boolean) => void;
-  onDelete: (prefix: string) => void;
+interface FilterItemProps {
+  entry: FilterEntry;
+  onToggle: (filter: string, enabled: boolean) => void;
+  onDelete: (filter: string) => void;
 }
 
-export function PrefixItem({ entry, onToggle, onDelete }: PrefixItemProps) {
+export function FilterItem({ entry, onToggle, onDelete }: FilterItemProps) {
   return (
     <View style={styles.container}>
       <View style={styles.leftSection}>
@@ -22,10 +22,10 @@ export function PrefixItem({ entry, onToggle, onDelete }: PrefixItemProps) {
         </View>
         <View style={styles.textSection}>
           <Text
-            style={[styles.prefix, !entry.enabled && styles.disabledText]}
+            style={[styles.filter, !entry.enabled && styles.disabledText]}
             numberOfLines={1}
           >
-            {entry.prefix}
+            {entry.countryCode ? `${entry.countryCode} ${entry.filter}` : entry.filter}
           </Text>
           {entry.label ? (
             <Text
@@ -40,7 +40,7 @@ export function PrefixItem({ entry, onToggle, onDelete }: PrefixItemProps) {
       <View style={styles.rightSection}>
         <Switch
           value={entry.enabled}
-          onValueChange={(val) => onToggle(entry.prefix, val)}
+          onValueChange={(val) => onToggle(entry.filter, val)}
           trackColor={{
             false: Colors.surfaceVariant,
             true: Colors.primaryContainer,
@@ -48,7 +48,7 @@ export function PrefixItem({ entry, onToggle, onDelete }: PrefixItemProps) {
           thumbColor={entry.enabled ? Colors.primary : Colors.outline}
         />
         <Pressable
-          onPress={() => onDelete(entry.prefix)}
+          onPress={() => onDelete(entry.filter)}
           style={styles.deleteButton}
           hitSlop={8}
         >
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   textSection: {
     flex: 1,
   },
-  prefix: {
+  filter: {
     fontSize: 16,
     fontWeight: "600",
     color: Colors.onSurface,

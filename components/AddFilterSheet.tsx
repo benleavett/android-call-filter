@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,47 +9,58 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { getPreferredDialCode } from "@/constants/countryCodes";
 
-interface AddPrefixSheetProps {
+interface AddFilterSheetProps {
   visible: boolean;
   onClose: () => void;
-  onAdd: (prefix: string, label: string) => Promise<boolean>;
+  onAdd: (filter: string, label: string, countryCode: string) => Promise<boolean>;
 }
 
-export function AddPrefixSheet({ visible, onClose, onAdd }: AddPrefixSheetProps) {
+export function AddFilterSheet({ visible, onClose, onAdd }: AddFilterSheetProps) {
   const { t } = useTranslation();
-  const [prefix, setPrefix] = useState("");
+  const insets = useSafeAreaInsets();
+  const [filter, setFilter] = useState("");
   const [label, setLabel] = useState("");
+  const [countryCode, setCountryCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  // Load preferred dial code each time the sheet opens
+  useEffect(() => {
+    if (visible) {
+      getPreferredDialCode().then(setCountryCode);
+    }
+  }, [visible]);
+
   const handleAdd = async () => {
-    const cleaned = prefix.replace(/\s/g, "");
-    if (!cleaned || !/^[+\d][\d]*$/.test(cleaned)) {
-      setError(t("prefixes.invalidError"));
+    const cleaned = filter.replace(/\s/g, "");
+    if (!cleaned || !/^[\d]+$/.test(cleaned)) {
+      setError(t("filters.invalidError"));
       return;
     }
 
     setSubmitting(true);
     setError(null);
 
-    const success = await onAdd(cleaned, label.trim());
+    const success = await onAdd(cleaned, label.trim(), countryCode.trim());
     setSubmitting(false);
 
     if (success) {
-      setPrefix("");
+      setFilter("");
       setLabel("");
       setError(null);
       onClose();
     } else {
-      setError(t("prefixes.duplicateError"));
+      setError(t("filters.duplicateError"));
     }
   };
 
   const handleClose = () => {
-    setPrefix("");
+    setFilter("");
     setLabel("");
     setError(null);
     onClose();
@@ -67,31 +78,41 @@ export function AddPrefixSheet({ visible, onClose, onAdd }: AddPrefixSheetProps)
         style={styles.overlay}
       >
         <Pressable style={styles.backdrop} onPress={handleClose} />
-        <View style={styles.sheet}>
+        <View style={[styles.sheet, { paddingBottom: Spacing.lg + insets.bottom }]}>
           <View style={styles.handle} />
-          <Text style={styles.title}>{t("prefixes.addPrefix")}</Text>
+          <Text style={styles.title}>{t("filters.addFilter")}</Text>
 
-          <Text style={styles.inputLabel}>{t("prefixes.prefixLabel")}</Text>
+          <Text style={styles.inputLabel}>{t("filters.countryCodeLabel")}</Text>
+          <TextInput
+            style={styles.input}
+            value={countryCode}
+            onChangeText={setCountryCode}
+            placeholder="+33"
+            placeholderTextColor={Colors.outline}
+            keyboardType="phone-pad"
+          />
+
+          <Text style={styles.inputLabel}>{t("filters.numberLabel")}</Text>
           <TextInput
             style={[styles.input, error ? styles.inputError : null]}
-            value={prefix}
+            value={filter}
             onChangeText={(text) => {
-              setPrefix(text);
+              setFilter(text);
               setError(null);
             }}
-            placeholder={t("prefixes.prefixPlaceholder")}
+            placeholder={t("filters.numberPlaceholder")}
             placeholderTextColor={Colors.outline}
             keyboardType="phone-pad"
             autoFocus
           />
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-          <Text style={styles.inputLabel}>{t("prefixes.labelLabel")}</Text>
+          <Text style={styles.inputLabel}>{t("filters.labelLabel")}</Text>
           <TextInput
             style={styles.input}
             value={label}
             onChangeText={setLabel}
-            placeholder={t("prefixes.labelPlaceholder")}
+            placeholder={t("filters.labelPlaceholder")}
             placeholderTextColor={Colors.outline}
           />
 
@@ -137,7 +158,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: BorderRadius.xl,
     borderTopRightRadius: BorderRadius.xl,
     padding: Spacing.lg,
-    paddingBottom: Spacing.xxl,
   },
   handle: {
     width: 32,

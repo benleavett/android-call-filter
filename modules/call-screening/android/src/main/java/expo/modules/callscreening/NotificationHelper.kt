@@ -31,7 +31,7 @@ class NotificationHelper(private val context: Context) {
         manager.createNotificationChannel(channel)
     }
 
-    fun showBlockedCallNotification(phoneNumber: String, matchedPrefix: String) {
+    fun showBlockedCallNotification(phoneNumber: String, matchedFilter: String) {
         val iconRes = try {
             context.resources.getIdentifier("ic_notification", "drawable", context.packageName)
                 .takeIf { it != 0 } ?: android.R.drawable.ic_menu_call
@@ -42,7 +42,7 @@ class NotificationHelper(private val context: Context) {
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(iconRes)
             .setContentTitle("Call Blocked")
-            .setContentText("Blocked call from $phoneNumber (prefix: $matchedPrefix)")
+            .setContentText("Blocked call from $phoneNumber (filter: $matchedFilter)")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
             .build()

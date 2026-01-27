@@ -92,8 +92,8 @@ export default function DashboardScreen() {
 
       <View style={styles.statsRow}>
         <StatsCard
-          title={t("dashboard.activePrefixes")}
-          value={stats?.activePrefixes ?? 0}
+          title={t("dashboard.activeFilters")}
+          value={stats?.activeFilters ?? 0}
           icon="filter-check"
           color={Colors.tertiary}
         />

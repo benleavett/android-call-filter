@@ -1,6 +1,7 @@
-export interface PrefixEntry {
-  prefix: string;
+export interface FilterEntry {
+  filter: string;
   label: string;
+  countryCode: string;
   enabled: boolean;
   createdAt: number;
 }
@@ -8,7 +9,7 @@ export interface PrefixEntry {
 export interface CallLogEntry {
   id: number;
   phoneNumber: string;
-  matchedPrefix: string;
+  matchedFilter: string;
   timestamp: number;
   callDirection: string;
 }
@@ -16,6 +17,6 @@ export interface CallLogEntry {
 export interface CallStats {
   totalFiltered: number;
   todayCount: number;
-  activePrefixes: number;
-  totalPrefixes: number;
+  activeFilters: number;
+  totalFilters: number;
 }

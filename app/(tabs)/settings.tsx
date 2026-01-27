@@ -1,8 +1,14 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { useState, useEffect, useCallback } from "react";
+import { View, Text, Pressable, ScrollView, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Constants from "expo-constants";
 import { setLanguage } from "@/i18n";
+import {
+  COUNTRIES,
+  getCountryPreference,
+  setCountryPreference,
+} from "@/constants/countryCodes";
 import { Colors, Spacing, BorderRadius } from "@/constants/theme";
 
 const LANGUAGES = [
@@ -15,51 +21,146 @@ export default function SettingsScreen() {
   const currentLanguage = i18n.language;
   const appVersion = Constants.expoConfig?.version ?? "1.0.0";
 
+  const [selectedCountry, setSelectedCountry] = useState("FR");
+  const [countryOpen, setCountryOpen] = useState(false);
+  const [languageOpen, setLanguageOpen] = useState(false);
+
+  useEffect(() => {
+    getCountryPreference().then(setSelectedCountry);
+  }, []);
+
   const handleLanguageChange = async (code: string) => {
     await setLanguage(code);
+    setLanguageOpen(false);
   };
 
+  const handleCountryChange = useCallback(async (region: string) => {
+    setSelectedCountry(region);
+    setCountryOpen(false);
+    await setCountryPreference(region);
+  }, []);
+
+  const selectedCountryData = COUNTRIES.find((c) => c.region === selectedCountry);
+  const selectedLang = LANGUAGES.find((l) => l.code === currentLanguage);
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      {/* Country dropdown */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>{t("settings.country")}</Text>
+        <Text style={styles.sectionDescription}>
+          {t("settings.countryDesc")}
+        </Text>
+        <Pressable
+          style={[styles.dropdownTrigger, countryOpen && styles.dropdownTriggerOpen]}
+          onPress={() => {
+            setCountryOpen((v) => !v);
+            setLanguageOpen(false);
+          }}
+        >
+          <Text style={styles.triggerFlag}>
+            {selectedCountryData?.region ?? "FR"}
+          </Text>
+          <Text style={styles.triggerLabel} numberOfLines={1}>
+            {t(`settings.countries.${selectedCountry}`)}
+          </Text>
+          <Text style={styles.triggerDetail}>
+            {selectedCountryData?.dialCode ?? "+33"}
+          </Text>
+          <MaterialCommunityIcons
+            name={countryOpen ? "chevron-up" : "chevron-down"}
+            size={22}
+            color={Colors.onSurfaceVariant}
+          />
+        </Pressable>
+        {countryOpen && (
+          <ScrollView style={styles.dropdownList} nestedScrollEnabled>
+            {COUNTRIES.map((country) => {
+              const isActive = selectedCountry === country.region;
+              return (
+                <Pressable
+                  key={country.region}
+                  style={[styles.dropdownItem, isActive && styles.dropdownItemActive]}
+                  onPress={() => handleCountryChange(country.region)}
+                >
+                  <Text style={styles.itemFlag}>{country.region}</Text>
+                  <Text
+                    style={[styles.itemLabel, isActive && styles.itemLabelActive]}
+                    numberOfLines={1}
+                  >
+                    {t(`settings.countries.${country.region}`)}
+                  </Text>
+                  <Text style={[styles.itemDetail, isActive && styles.itemDetailActive]}>
+                    {country.dialCode}
+                  </Text>
+                  {isActive && (
+                    <MaterialCommunityIcons
+                      name="check"
+                      size={18}
+                      color={Colors.primary}
+                    />
+                  )}
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+        )}
+      </View>
+
+      {/* Language dropdown */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>{t("settings.language")}</Text>
         <Text style={styles.sectionDescription}>
           {t("settings.languageDesc")}
         </Text>
-        <View style={styles.languageOptions}>
-          {LANGUAGES.map((lang) => {
-            const isActive = currentLanguage === lang.code;
-            return (
-              <Pressable
-                key={lang.code}
-                style={[
-                  styles.languageOption,
-                  isActive && styles.languageOptionActive,
-                ]}
-                onPress={() => handleLanguageChange(lang.code)}
-              >
-                <Text style={styles.flag}>{lang.flag}</Text>
-                <Text
-                  style={[
-                    styles.languageLabel,
-                    isActive && styles.languageLabelActive,
-                  ]}
+        <Pressable
+          style={[styles.dropdownTrigger, languageOpen && styles.dropdownTriggerOpen]}
+          onPress={() => {
+            setLanguageOpen((v) => !v);
+            setCountryOpen(false);
+          }}
+        >
+          <Text style={styles.triggerFlag}>{selectedLang?.flag ?? "EN"}</Text>
+          <Text style={styles.triggerLabel}>
+            {selectedLang ? t(selectedLang.labelKey) : "English"}
+          </Text>
+          <MaterialCommunityIcons
+            name={languageOpen ? "chevron-up" : "chevron-down"}
+            size={22}
+            color={Colors.onSurfaceVariant}
+          />
+        </Pressable>
+        {languageOpen && (
+          <View style={styles.dropdownList}>
+            {LANGUAGES.map((lang) => {
+              const isActive = currentLanguage === lang.code;
+              return (
+                <Pressable
+                  key={lang.code}
+                  style={[styles.dropdownItem, isActive && styles.dropdownItemActive]}
+                  onPress={() => handleLanguageChange(lang.code)}
                 >
-                  {t(lang.labelKey)}
-                </Text>
-                {isActive && (
-                  <MaterialCommunityIcons
-                    name="check-circle"
-                    size={20}
-                    color={Colors.primary}
-                  />
-                )}
-              </Pressable>
-            );
-          })}
-        </View>
+                  <Text style={styles.itemFlag}>{lang.flag}</Text>
+                  <Text
+                    style={[styles.itemLabel, isActive && styles.itemLabelActive]}
+                  >
+                    {t(lang.labelKey)}
+                  </Text>
+                  {isActive && (
+                    <MaterialCommunityIcons
+                      name="check"
+                      size={18}
+                      color={Colors.primary}
+                    />
+                  )}
+                </Pressable>
+              );
+            })}
+          </View>
+        )}
       </View>
 
+      {/* About */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>{t("settings.about")}</Text>
         <View style={styles.aboutCard}>
@@ -78,7 +179,7 @@ export default function SettingsScreen() {
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -86,7 +187,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
+  },
+  content: {
     padding: Spacing.md,
+    paddingBottom: 48,
   },
   section: {
     marginBottom: Spacing.lg,
@@ -102,10 +206,9 @@ const styles = StyleSheet.create({
     color: Colors.onSurfaceVariant,
     marginBottom: Spacing.md,
   },
-  languageOptions: {
-    gap: Spacing.sm,
-  },
-  languageOption: {
+
+  /* Dropdown trigger (collapsed row) */
+  dropdownTrigger: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Colors.surfaceContainerLowest,
@@ -115,27 +218,80 @@ const styles = StyleSheet.create({
     borderColor: Colors.outlineVariant,
     gap: Spacing.md,
   },
-  languageOptionActive: {
-    borderColor: Colors.primary,
-    backgroundColor: Colors.primaryContainer + "30",
+  dropdownTriggerOpen: {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderBottomColor: Colors.outlineVariant,
   },
-  flag: {
+  triggerFlag: {
     fontSize: 16,
     fontWeight: "700",
     color: Colors.onSurfaceVariant,
     width: 28,
     textAlign: "center",
   },
-  languageLabel: {
+  triggerLabel: {
     flex: 1,
     fontSize: 15,
+    fontWeight: "600",
+    color: Colors.onSurface,
+  },
+  triggerDetail: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: Colors.onSurfaceVariant,
+  },
+
+  /* Dropdown options list */
+  dropdownList: {
+    backgroundColor: Colors.surfaceContainerLowest,
+    borderWidth: 1.5,
+    borderTopWidth: 0,
+    borderColor: Colors.outlineVariant,
+    borderBottomLeftRadius: BorderRadius.md,
+    borderBottomRightRadius: BorderRadius.md,
+    maxHeight: 260,
+    overflow: "hidden",
+  },
+  dropdownItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: Spacing.md,
+    gap: Spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: Colors.outlineVariant,
+  },
+  dropdownItemActive: {
+    backgroundColor: Colors.primaryContainer + "30",
+  },
+  itemFlag: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: Colors.onSurfaceVariant,
+    width: 28,
+    textAlign: "center",
+  },
+  itemLabel: {
+    flex: 1,
+    fontSize: 14,
     fontWeight: "500",
     color: Colors.onSurface,
   },
-  languageLabelActive: {
+  itemLabelActive: {
     color: Colors.primary,
     fontWeight: "600",
   },
+  itemDetail: {
+    fontSize: 13,
+    color: Colors.onSurfaceVariant,
+    fontWeight: "500",
+  },
+  itemDetailActive: {
+    color: Colors.primary,
+  },
+
+  /* About card */
   aboutCard: {
     backgroundColor: Colors.surfaceContainerLowest,
     borderRadius: BorderRadius.md,

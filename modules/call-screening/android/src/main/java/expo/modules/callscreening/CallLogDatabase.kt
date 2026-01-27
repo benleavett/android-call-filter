@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 data class CallLogEntry(
     val id: Long,
     val phoneNumber: String,
-    val matchedPrefix: String,
+    val matchedFilter: String,
     val timestamp: Long,
     val callDirection: String
 )
@@ -46,10 +46,10 @@ class CallLogDatabase(context: Context) :
         onCreate(db)
     }
 
-    fun insertEntry(phoneNumber: String, matchedPrefix: String): Long {
+    fun insertEntry(phoneNumber: String, matchedFilter: String): Long {
         val values = ContentValues().apply {
             put(COL_PHONE_NUMBER, phoneNumber)
-            put(COL_MATCHED_PREFIX, matchedPrefix)
+            put(COL_MATCHED_PREFIX, matchedFilter)
             put(COL_TIMESTAMP, System.currentTimeMillis())
             put(COL_DIRECTION, "incoming")
         }
@@ -69,7 +69,7 @@ class CallLogDatabase(context: Context) :
                     CallLogEntry(
                         id = it.getLong(it.getColumnIndexOrThrow(COL_ID)),
                         phoneNumber = it.getString(it.getColumnIndexOrThrow(COL_PHONE_NUMBER)),
-                        matchedPrefix = it.getString(it.getColumnIndexOrThrow(COL_MATCHED_PREFIX)),
+                        matchedFilter = it.getString(it.getColumnIndexOrThrow(COL_MATCHED_PREFIX)),
                         timestamp = it.getLong(it.getColumnIndexOrThrow(COL_TIMESTAMP)),
                         callDirection = it.getString(it.getColumnIndexOrThrow(COL_DIRECTION))
                     )

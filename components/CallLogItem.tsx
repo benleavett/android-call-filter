@@ -41,9 +41,9 @@ export function CallLogItem({ entry }: CallLogItemProps) {
           {entry.phoneNumber}
         </Text>
         <View style={styles.metaRow}>
-          <View style={styles.prefixBadge}>
-            <Text style={styles.prefixText}>
-              {t("callLog.prefix", { prefix: entry.matchedPrefix })}
+          <View style={styles.filterBadge}>
+            <Text style={styles.filterText}>
+              {t("callLog.matchedFilter", { filter: entry.matchedFilter })}
             </Text>
           </View>
           <Text style={styles.timestamp}>
@@ -87,13 +87,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: Spacing.sm,
   },
-  prefixBadge: {
+  filterBadge: {
     backgroundColor: Colors.secondaryContainer,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
     borderRadius: BorderRadius.sm,
   },
-  prefixText: {
+  filterText: {
     fontSize: 11,
     fontWeight: "500",
     color: Colors.onPrimaryContainer,

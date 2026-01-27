@@ -1,10 +1,12 @@
 import { Tabs } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/theme";
 
 export default function TabLayout() {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -14,8 +16,7 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: Colors.surfaceContainerLow,
           borderTopColor: Colors.outlineVariant,
-          height: 64,
-          paddingBottom: 8,
+          paddingBottom: insets.bottom + 4,
           paddingTop: 4,
         },
         tabBarLabelStyle: {
@@ -47,9 +48,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="prefixes"
+        name="filters"
         options={{
-          title: t("tabs.prefixes"),
+          title: t("tabs.filters"),
           tabBarIcon: ({ color, focused }) => (
             <MaterialCommunityIcons
               name={focused ? "filter" : "filter-outline"}

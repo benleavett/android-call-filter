@@ -3,11 +3,11 @@ package expo.modules.callscreening
 import android.content.Context
 import android.content.SharedPreferences
 import org.json.JSONArray
-import org.json.JSONObject
 
-data class PrefixEntry(
-    val prefix: String,
+data class FilterEntry(
+    val filter: String,
     val label: String,
+    val countryCode: String,
     val enabled: Boolean,
     val createdAt: Long
 )
@@ -22,16 +22,17 @@ class PrefixManager(private val context: Context) {
     private val prefs: SharedPreferences
         get() = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    fun getPrefixes(): List<PrefixEntry> {
+    fun getFilters(): List<FilterEntry> {
         val json = prefs.getString(KEY_PREFIXES, "[]") ?: "[]"
         val array = JSONArray(json)
-        val result = mutableListOf<PrefixEntry>()
+        val result = mutableListOf<FilterEntry>()
         for (i in 0 until array.length()) {
             val obj = array.getJSONObject(i)
             result.add(
-                PrefixEntry(
-                    prefix = obj.getString("prefix"),
+                FilterEntry(
+                    filter = obj.getString("filter"),
                     label = obj.optString("label", ""),
+                    countryCode = obj.optString("countryCode", ""),
                     enabled = obj.optBoolean("enabled", true),
                     createdAt = obj.optLong("createdAt", System.currentTimeMillis())
                 )
@@ -40,58 +41,43 @@ class PrefixManager(private val context: Context) {
         return result
     }
 
-    fun addPrefix(prefix: String, label: String): Boolean {
-        val prefixes = getPrefixes().toMutableList()
-        if (prefixes.any { it.prefix == prefix }) return false
-        prefixes.add(
-            PrefixEntry(
-                prefix = prefix,
-                label = label,
-                enabled = true,
-                createdAt = System.currentTimeMillis()
-            )
-        )
-        savePrefixes(prefixes)
-        return true
+    fun getEnabledFilters(): List<FilterEntry> {
+        return getFilters().filter { it.enabled }
     }
 
-    fun removePrefix(prefix: String): Boolean {
-        val prefixes = getPrefixes().toMutableList()
-        val removed = prefixes.removeAll { it.prefix == prefix }
-        if (removed) savePrefixes(prefixes)
-        return removed
-    }
-
-    fun togglePrefix(prefix: String, enabled: Boolean): Boolean {
-        val prefixes = getPrefixes().toMutableList()
-        val index = prefixes.indexOfFirst { it.prefix == prefix }
-        if (index == -1) return false
-        prefixes[index] = prefixes[index].copy(enabled = enabled)
-        savePrefixes(prefixes)
-        return true
-    }
-
-    fun getEnabledPrefixes(): List<String> {
-        return getPrefixes().filter { it.enabled }.map { it.prefix }
-    }
-
-    fun matchesPrefix(phoneNumber: String): String? {
+    /**
+     * Match an incoming phone number against enabled filters.
+     *
+     * Incoming numbers arrive in international format (e.g. +33162123456).
+     * Filters are stored as domestic numbers (e.g. 0162) with a country code (+33).
+     *
+     * Matching strategy:
+     * 1. International: strip leading 0 from filter, prepend country code → "+33162",
+     *    check if the incoming number starts with it.
+     * 2. Domestic: check if the cleaned number starts with the filter as-is.
+     */
+    fun matchesFilter(phoneNumber: String): String? {
         val cleaned = phoneNumber.replace(Regex("[^\\d+]"), "")
-        val enabledPrefixes = getEnabledPrefixes()
-        return enabledPrefixes.firstOrNull { cleaned.startsWith(it) }
-    }
+        val enabledFilters = getEnabledFilters()
 
-    private fun savePrefixes(prefixes: List<PrefixEntry>) {
-        val array = JSONArray()
-        for (entry in prefixes) {
-            val obj = JSONObject().apply {
-                put("prefix", entry.prefix)
-                put("label", entry.label)
-                put("enabled", entry.enabled)
-                put("createdAt", entry.createdAt)
+        for (entry in enabledFilters) {
+            val filterDigits = entry.filter
+
+            // International match: country code + filter without leading zero
+            if (entry.countryCode.isNotEmpty()) {
+                val withoutLeadingZero = filterDigits.trimStart('0')
+                val international = entry.countryCode + withoutLeadingZero
+                if (cleaned.startsWith(international)) {
+                    return entry.filter
+                }
             }
-            array.put(obj)
+
+            // Domestic match: direct prefix check
+            if (cleaned.startsWith(filterDigits)) {
+                return entry.filter
+            }
         }
-        prefs.edit().putString(KEY_PREFIXES, array.toString()).apply()
+
+        return null
     }
 }

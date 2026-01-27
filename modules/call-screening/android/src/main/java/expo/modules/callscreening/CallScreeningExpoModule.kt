@@ -15,39 +15,23 @@ class CallScreeningExpoModule : Module() {
     override fun definition() = ModuleDefinition {
         Name("CallScreening")
 
-        // --- Prefix Management ---
-
-        AsyncFunction("getPrefixes") {
-            PrefixManager(context).getPrefixes().map { entry ->
-                bundleOf(
-                    "prefix" to entry.prefix,
-                    "label" to entry.label,
-                    "enabled" to entry.enabled,
-                    "createdAt" to entry.createdAt.toDouble()
-                )
-            }
+        // Write the full prefix list to native SharedPreferences so the
+        // CallFilterService can read it without the JS runtime.
+        AsyncFunction("syncPrefixes") { json: String ->
+            context.getSharedPreferences("call_filter_prefixes", Context.MODE_PRIVATE)
+                .edit()
+                .putString("prefixes_json", json)
+                .apply()
         }
 
-        AsyncFunction("addPrefix") { prefix: String, label: String ->
-            PrefixManager(context).addPrefix(prefix, label)
-        }
-
-        AsyncFunction("removePrefix") { prefix: String ->
-            PrefixManager(context).removePrefix(prefix)
-        }
-
-        AsyncFunction("togglePrefix") { prefix: String, enabled: Boolean ->
-            PrefixManager(context).togglePrefix(prefix, enabled)
-        }
-
-        // --- Call Log ---
+        // --- Call Log (written by CallFilterService, read here) ---
 
         AsyncFunction("getCallLog") { limit: Int, offset: Int ->
             CallLogDatabase(context).getEntries(limit, offset).map { entry ->
                 bundleOf(
                     "id" to entry.id.toDouble(),
                     "phoneNumber" to entry.phoneNumber,
-                    "matchedPrefix" to entry.matchedPrefix,
+                    "matchedFilter" to entry.matchedFilter,
                     "timestamp" to entry.timestamp.toDouble(),
                     "callDirection" to entry.callDirection
                 )
@@ -58,16 +42,11 @@ class CallScreeningExpoModule : Module() {
             CallLogDatabase(context).clearAll()
         }
 
-        // --- Stats ---
-
-        AsyncFunction("getStats") {
+        AsyncFunction("getCallLogStats") {
             val db = CallLogDatabase(context)
-            val pm = PrefixManager(context)
             bundleOf(
                 "totalFiltered" to db.getTotalCount(),
-                "todayCount" to db.getTodayCount(),
-                "activePrefixes" to pm.getPrefixes().count { it.enabled },
-                "totalPrefixes" to pm.getPrefixes().size
+                "todayCount" to db.getTodayCount()
             )
         }
 
