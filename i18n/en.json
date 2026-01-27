@@ -1,0 +1,71 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "remove": "Remove",
+    "clear": "Clear",
+    "enable": "Enable",
+    "disable": "Disable",
+    "save": "Save",
+    "add": "Add",
+    "close": "Close",
+    "loading": "Loading..."
+  },
+  "tabs": {
+    "dashboard": "Dashboard",
+    "prefixes": "Prefixes",
+    "callLog": "Call Log",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalFiltered": "Calls Filtered",
+    "today": "Today",
+    "activePrefixes": "Active Prefixes",
+    "recentActivity": "Recent Activity",
+    "noRecentActivity": "No recent activity",
+    "noRecentActivityDesc": "Filtered calls will appear here"
+  },
+  "service": {
+    "active": "Call screening active",
+    "inactive": "Call screening inactive",
+    "enableDesc": "Enable call screening to start filtering calls",
+    "enable": "Enable Service"
+  },
+  "prefixes": {
+    "title": "Prefixes",
+    "addPrefix": "Add Prefix",
+    "prefixLabel": "Phone prefix",
+    "prefixPlaceholder": "+1555",
+    "labelLabel": "Label (optional)",
+    "labelPlaceholder": "e.g. Spam calls",
+    "removeTitle": "Remove Prefix",
+    "removeMessage": "Remove \"{{prefix}}\" from the filter list?",
+    "duplicateError": "This prefix already exists",
+    "invalidError": "Enter a valid phone prefix",
+    "emptyTitle": "No Prefixes",
+    "emptyMessage": "Add a phone number prefix to start filtering calls"
+  },
+  "callLog": {
+    "title": "Call Log",
+    "clearTitle": "Clear Call Log",
+    "clearMessage": "Remove all filtered call history? This cannot be undone.",
+    "emptyTitle": "No Filtered Calls",
+    "emptyMessage": "Calls matching your prefixes will appear here",
+    "prefix": "Prefix: {{prefix}}",
+    "justNow": "Just now",
+    "minutesAgo": "{{count}} min ago",
+    "hoursAgo": "{{count}} hr ago",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{count}} days ago"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "languageDesc": "Choose your preferred language",
+    "english": "English",
+    "french": "French",
+    "about": "About",
+    "version": "Version",
+    "appName": "Call Filter"
+  }
+}
