@@ -4,9 +4,10 @@ import type {
   FilterEntry,
   CallLogEntry,
   CallStats,
+  CallBlockedEvent,
 } from "./src/CallScreening.types";
 
-export type { FilterEntry, CallLogEntry, CallStats };
+export type { FilterEntry, CallLogEntry, CallStats, CallBlockedEvent };
 
 const native = CallScreeningModule;
 
@@ -124,4 +125,15 @@ export async function isServiceEnabled(): Promise<boolean> {
 export async function requestServiceEnable(): Promise<boolean> {
   if (!native) return false;
   return native.requestServiceEnable();
+}
+
+// ---------------------------------------------------------------------------
+// Events — real-time notifications from the native CallFilterService.
+// ---------------------------------------------------------------------------
+
+export function addCallBlockedListener(
+  listener: (event: CallBlockedEvent) => void
+): { remove(): void } | null {
+  if (!native) return null;
+  return native.addListener("onCallBlocked", listener);
 }

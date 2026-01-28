@@ -22,6 +22,7 @@
     "today": "Aujourd'hui",
     "activeFilters": "Filtres actifs",
     "recentActivity": "Activité récente",
+    "callBlocked": "Appel bloqué",
     "noRecentActivity": "Aucune activité récente",
     "noRecentActivityDesc": "Les appels filtrés apparaîtront ici"
   },
@@ -96,6 +97,6 @@
     },
     "about": "À propos",
     "version": "Version",
-    "appName": "Call Filter"
+    "appName": "Simple Call Blocker"
   }
 }

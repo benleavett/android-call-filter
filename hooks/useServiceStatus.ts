@@ -40,7 +40,12 @@ export function useServiceStatus() {
 
   const requestEnable = useCallback(async () => {
     await requestServiceEnable();
-  }, []);
+    // The system dialog is a separate activity. Re-check status
+    // after a short delay and again after a longer one in case the
+    // user takes time to respond.
+    setTimeout(checkStatus, 500);
+    setTimeout(checkStatus, 2000);
+  }, [checkStatus]);
 
   return { enabled, loading, checkStatus, requestEnable };
 }

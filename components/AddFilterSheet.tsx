@@ -29,7 +29,6 @@ export function AddFilterSheet({ visible, onClose, onAdd }: AddFilterSheetProps)
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  // Load preferred dial code each time the sheet opens
   useEffect(() => {
     if (visible) {
       getPreferredDialCode().then(setCountryCode);
@@ -82,29 +81,23 @@ export function AddFilterSheet({ visible, onClose, onAdd }: AddFilterSheetProps)
           <View style={styles.handle} />
           <Text style={styles.title}>{t("filters.addFilter")}</Text>
 
-          <Text style={styles.inputLabel}>{t("filters.countryCodeLabel")}</Text>
-          <TextInput
-            style={styles.input}
-            value={countryCode}
-            onChangeText={setCountryCode}
-            placeholder="+33"
-            placeholderTextColor={Colors.outline}
-            keyboardType="phone-pad"
-          />
-
           <Text style={styles.inputLabel}>{t("filters.numberLabel")}</Text>
-          <TextInput
-            style={[styles.input, error ? styles.inputError : null]}
-            value={filter}
-            onChangeText={(text) => {
-              setFilter(text);
-              setError(null);
-            }}
-            placeholder={t("filters.numberPlaceholder")}
-            placeholderTextColor={Colors.outline}
-            keyboardType="phone-pad"
-            autoFocus
-          />
+          <View style={[styles.numberRow, error ? styles.numberRowError : null]}>
+            <Text style={styles.countryCodePrefix}>{countryCode}</Text>
+            <View style={styles.divider} />
+            <TextInput
+              style={styles.numberInput}
+              value={filter}
+              onChangeText={(text) => {
+                setFilter(text);
+                setError(null);
+              }}
+              placeholder={t("filters.numberPlaceholder")}
+              placeholderTextColor={Colors.outline}
+              keyboardType="phone-pad"
+              autoFocus
+            />
+          </View>
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
           <Text style={styles.inputLabel}>{t("filters.labelLabel")}</Text>
@@ -179,6 +172,38 @@ const styles = StyleSheet.create({
     color: Colors.onSurfaceVariant,
     marginBottom: Spacing.xs,
   },
+  numberRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.surfaceContainerHigh,
+    borderRadius: BorderRadius.sm,
+    borderWidth: 1,
+    borderColor: Colors.outlineVariant,
+    marginBottom: Spacing.md,
+  },
+  numberRowError: {
+    borderColor: Colors.error,
+  },
+  countryCodePrefix: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: Colors.onSurfaceVariant,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 14,
+  },
+  divider: {
+    width: 1,
+    alignSelf: "stretch",
+    backgroundColor: Colors.outlineVariant,
+    marginVertical: 8,
+  },
+  numberInput: {
+    flex: 1,
+    fontSize: 16,
+    color: Colors.onSurface,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 14,
+  },
   input: {
     backgroundColor: Colors.surfaceContainerHigh,
     borderRadius: BorderRadius.sm,
@@ -189,9 +214,6 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     borderWidth: 1,
     borderColor: Colors.outlineVariant,
-  },
-  inputError: {
-    borderColor: Colors.error,
   },
   errorText: {
     fontSize: 12,

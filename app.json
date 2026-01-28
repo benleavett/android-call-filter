@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Call Filter",
+    "name": "Simple Call Blocker",
     "slug": "android-call-filter",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -19,7 +19,7 @@
         "backgroundColor": "#3949ab"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.callfilter.app"
+      "package": "com.cadence.callblocker"
     },
     "plugins": [
       "expo-router",
@@ -43,6 +43,9 @@
       "eas": {
         "projectId": "e8c89a9f-3635-44e9-9578-52a3e8ff0b01"
       }
+    },
+    "ios": {
+      "bundleIdentifier": "com.cadence.callblocker"
     }
   }
 }

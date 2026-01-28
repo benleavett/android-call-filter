@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,18 +6,21 @@ import {
   RefreshControl,
   StyleSheet,
 } from "react-native";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect, router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { StatsCard } from "@/components/StatsCard";
 import { CallLogItem } from "@/components/CallLogItem";
+import { BlockedCallCard } from "@/components/BlockedCallCard";
 import { ServiceStatusBanner } from "@/components/ServiceStatusBanner";
 import { EmptyState } from "@/components/EmptyState";
 import { useServiceStatus } from "@/hooks/useServiceStatus";
 import {
   getStats,
   getCallLog,
+  addCallBlockedListener,
   type CallStats,
   type CallLogEntry,
+  type CallBlockedEvent,
 } from "@/modules/call-screening";
 import { Colors, Spacing, BorderRadius } from "@/constants/theme";
 
@@ -31,6 +34,7 @@ export default function DashboardScreen() {
   const [stats, setStats] = useState<CallStats | null>(null);
   const [recentCalls, setRecentCalls] = useState<CallLogEntry[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [blockedCall, setBlockedCall] = useState<CallBlockedEvent | null>(null);
 
   const loadData = useCallback(async () => {
     try {
@@ -50,6 +54,16 @@ export default function DashboardScreen() {
       loadData();
     }, [loadData])
   );
+
+  useEffect(() => {
+    const subscription = addCallBlockedListener((event) => {
+      setBlockedCall(event);
+      loadData(); // refresh stats & recent calls
+    });
+    return () => {
+      subscription?.remove();
+    };
+  }, [loadData]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -75,29 +89,36 @@ export default function DashboardScreen() {
         onEnable={requestEnable}
       />
 
-      <View style={styles.statsRow}>
+      {blockedCall ? (
+        <BlockedCallCard
+          phoneNumber={blockedCall.phoneNumber}
+          matchedFilter={blockedCall.matchedFilter}
+          onDismiss={() => setBlockedCall(null)}
+        />
+      ) : null}
+
+      <View style={styles.statsList}>
         <StatsCard
           title={t("dashboard.totalFiltered")}
           value={stats?.totalFiltered ?? 0}
           icon="phone-off"
           color={Colors.primary}
+          onPress={() => router.navigate("/log")}
         />
         <StatsCard
           title={t("dashboard.today")}
           value={stats?.todayCount ?? 0}
           icon="calendar-today"
           color={Colors.secondary}
+          onPress={() => router.navigate("/log")}
         />
-      </View>
-
-      <View style={styles.statsRow}>
         <StatsCard
           title={t("dashboard.activeFilters")}
           value={stats?.activeFilters ?? 0}
           icon="filter-check"
           color={Colors.tertiary}
+          onPress={() => router.navigate("/filters")}
         />
-        <View style={styles.spacer} />
       </View>
 
       <View style={styles.section}>
@@ -130,14 +151,10 @@ const styles = StyleSheet.create({
   content: {
     paddingBottom: 48,
   },
-  statsRow: {
-    flexDirection: "row",
-    gap: 16,
+  statsList: {
+    gap: Spacing.sm,
     paddingHorizontal: Spacing.md,
     marginTop: Spacing.md,
-  },
-  spacer: {
-    flex: 1,
   },
   section: {
     marginTop: Spacing.lg,

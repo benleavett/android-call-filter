@@ -1,0 +1,63 @@
+Privacy Policy
+
+Simple Call Blocker
+Published by Cadence Digital -- cadencedigital.fr
+Last updated: 27 January 2026
+
+
+Summary
+
+Simple Call Blocker operates entirely on your device. It does not collect, transmit, or share any personal data.
+
+
+Data We Collect
+
+None. The App does not send any data to Cadence Digital or any third party.
+
+
+Data Stored On Your Device
+
+The following data is stored locally on your device and never leaves it:
+
+- Call filters -- The phone number prefixes and labels you configure, stored in the app's local storage.
+- Blocked call log -- A record of incoming calls that were blocked, including the caller's phone number, the filter that matched, and the date and time. You can clear this log at any time from within the App.
+- Preferences -- Your chosen language and country setting.
+
+All local data is deleted when you uninstall the App.
+
+
+Permissions
+
+The App requests a single Android system role:
+
+- Call Screening role (ROLE_CALL_SCREENING) -- Required for the App to screen incoming calls. This is granted via the Android system dialog and can be revoked at any time in your device settings under Default apps.
+
+The App does not request access to your contacts, microphone, camera, location, or any other device permissions.
+
+
+Contacts
+
+The App does not read or access your contacts. Android's CallScreeningService API does not invoke call screening for phone numbers saved in your address book -- those calls always ring through normally.
+
+
+Third-Party Services
+
+The App does not integrate any third-party SDKs, analytics, advertising, or crash reporting services.
+
+
+Children's Privacy
+
+The App does not knowingly collect any data from anyone, including children under 13.
+
+
+Changes to This Policy
+
+We may update this Privacy Policy from time to time. The updated version will be indicated by the "Last updated" date above and will be available at cadencedigital.fr.
+
+
+Contact
+
+If you have questions about this Privacy Policy, contact us at:
+
+Cadence Digital
+Website: cadencedigital.fr

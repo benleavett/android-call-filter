@@ -1,4 +1,4 @@
-# Call Filter
+# Simple Call Blocker
 
 Android app that screens incoming phone calls by number prefix, rejects matches, and logs filtered calls. Built with React Native (Expo) and Android's `CallScreeningService` API.
 

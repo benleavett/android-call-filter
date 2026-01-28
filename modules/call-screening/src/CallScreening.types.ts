@@ -20,3 +20,9 @@ export interface CallStats {
   activeFilters: number;
   totalFilters: number;
 }
+
+export interface CallBlockedEvent {
+  phoneNumber: string;
+  matchedFilter: string;
+  timestamp: number;
+}

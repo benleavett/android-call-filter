@@ -23,7 +23,7 @@ class CallFilterService : CallScreeningService() {
         }
 
         val phoneNumber = handle.schemeSpecificPart ?: ""
-        Log.d(TAG, "Incoming call from: $phoneNumber")
+        Log.d(TAG, "Incoming call — raw handle: $handle, schemeSpecificPart: $phoneNumber")
 
         val prefixManager = PrefixManager(applicationContext)
         val matchedFilter = prefixManager.matchesFilter(phoneNumber)
@@ -45,6 +45,9 @@ class CallFilterService : CallScreeningService() {
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to show notification", e)
             }
+
+            // Notify the Expo module (if the app is in the foreground)
+            CallBlockedBus.emit(phoneNumber, matchedFilter, System.currentTimeMillis())
 
             val response = CallResponse.Builder()
                 .setDisallowCall(true)

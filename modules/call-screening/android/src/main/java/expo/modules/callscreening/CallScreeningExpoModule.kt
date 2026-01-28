@@ -1,19 +1,42 @@
 package expo.modules.callscreening
 
+import android.app.Activity
 import android.app.role.RoleManager
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.core.os.bundleOf
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 
 class CallScreeningExpoModule : Module() {
 
+    companion object {
+        private const val TAG = "CallScreening"
+        private const val REQUEST_CODE_CALL_SCREENING = 1001
+    }
+
     private val context: Context
         get() = requireNotNull(appContext.reactContext)
 
     override fun definition() = ModuleDefinition {
         Name("CallScreening")
+
+        Events("onCallBlocked")
+
+        OnStartObserving {
+            CallBlockedBus.setListener { phoneNumber, matchedFilter, timestamp ->
+                sendEvent("onCallBlocked", bundleOf(
+                    "phoneNumber" to phoneNumber,
+                    "matchedFilter" to matchedFilter,
+                    "timestamp" to timestamp.toDouble()
+                ))
+            }
+        }
+
+        OnStopObserving {
+            CallBlockedBus.setListener(null)
+        }
 
         // Write the full prefix list to native SharedPreferences so the
         // CallFilterService can read it without the JS runtime.
@@ -61,22 +84,35 @@ class CallScreeningExpoModule : Module() {
             }
         }
 
+        @Suppress("DEPRECATION")
         AsyncFunction("requestServiceEnable") {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val roleManager = context.getSystemService(RoleManager::class.java)
-                if (roleManager != null && !roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)) {
-                    val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
-                    val activity = appContext.currentActivity
-                    if (activity != null) {
-                        activity.startActivity(intent)
-                        true
-                    } else {
-                        false
-                    }
-                } else {
+                if (roleManager == null) {
+                    Log.w(TAG, "RoleManager not available")
                     false
+                } else if (roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)) {
+                    Log.d(TAG, "Role already held")
+                    true
+                } else {
+                    val activity = appContext.currentActivity
+                    if (activity == null) {
+                        Log.w(TAG, "No current activity to launch role request")
+                        false
+                    } else {
+                        try {
+                            val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
+                            activity.startActivityForResult(intent, REQUEST_CODE_CALL_SCREENING)
+                            Log.d(TAG, "Role request dialog launched via startActivityForResult")
+                            true
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Failed to launch role request", e)
+                            false
+                        }
+                    }
                 }
             } else {
+                Log.w(TAG, "API level ${Build.VERSION.SDK_INT} does not support call screening roles")
                 false
             }
         }
