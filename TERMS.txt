@@ -1,9 +1,3 @@
-Terms & Conditions
-
-Simple Call Blocker
-Last updated: 27 January 2026
-
-
 1. Introduction
 
 These Terms & Conditions ("Terms") govern your use of the Simple Call Blocker mobile application ("the App") published by Cadence Digital ("we", "us", "our"), a company registered in France. Our website is cadencedigital.fr.
@@ -24,9 +18,9 @@ The App provides call screening functionality on Android devices. It allows user
 
 4. Data & Privacy
 
-- On-device only. All data -- including filters, call logs, and preferences -- is stored locally on your device. The App does not transmit any data to external servers.
+- On-device storage. Call filters, blocked call logs, and preferences are stored locally on your device and never transmitted to external servers.
 - No account required. The App does not require registration or personal information.
-- No analytics or tracking. The App does not collect usage data, device identifiers, or telemetry.
+- Analytics. The App sends anonymised usage events (app launches and call-blocked counts) to PostHog to help us improve the App. No phone numbers or personal data are included in these events. See our Privacy Policy for details.
 - Call log. The App maintains a local log of calls it has blocked. You may clear this log at any time from within the App.
 - Contacts. The App does not access your contacts. Android's CallScreeningService does not invoke call screening for numbers in your address book.
 
@@ -74,3 +68,5 @@ If you have questions about these Terms, please contact us at:
 
 Cadence Digital
 Website: cadencedigital.fr
+
+Last updated: 11 March 2026

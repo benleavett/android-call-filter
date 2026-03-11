@@ -6,6 +6,24 @@ import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { initI18n } from "@/i18n";
 import { seedDefaultFilters } from "@/hooks/useSeedDefaults";
 import { Colors } from "@/constants/theme";
+import { PostHogProvider, usePostHog } from "posthog-react-native";
+import { isServiceEnabled } from "@/modules/call-screening";
+
+function AppInit() {
+  const posthog = usePostHog();
+
+  useEffect(() => {
+    isServiceEnabled()
+      .then((enabled) => {
+        posthog.capture("app_loaded", { screening_active: enabled });
+      })
+      .catch(() => {
+        posthog.capture("app_loaded", { screening_active: null });
+      });
+  }, []);
+
+  return null;
+}
 
 export default function RootLayout() {
   const [ready, setReady] = useState(false);
@@ -27,12 +45,15 @@ export default function RootLayout() {
   }
 
   return (
-    <GestureHandlerRootView style={styles.root}>
-      <StatusBar style="dark" />
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-    </GestureHandlerRootView>
+    <PostHogProvider apiKey="phc_yevDQifamX983XE1vbfYWlspgOtzohJaKi8Wh8PyxNb" options={{ host: "https://eu.i.posthog.com", flushAt: 1 }}>
+      <AppInit />
+      <GestureHandlerRootView style={styles.root}>
+        <StatusBar style="dark" />
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </GestureHandlerRootView>
+    </PostHogProvider>
   );
 }
 

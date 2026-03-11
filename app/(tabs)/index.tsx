@@ -5,6 +5,7 @@ import {
   ScrollView,
   RefreshControl,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { useFocusEffect, router } from "expo-router";
 import { useTranslation } from "react-i18next";
@@ -23,9 +24,11 @@ import {
   type CallBlockedEvent,
 } from "@/modules/call-screening";
 import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { usePostHog } from "posthog-react-native";
 
 export default function DashboardScreen() {
   const { t } = useTranslation();
+  const posthog = usePostHog();
   const {
     enabled,
     loading: statusLoading,
@@ -59,11 +62,23 @@ export default function DashboardScreen() {
     const subscription = addCallBlockedListener((event) => {
       setBlockedCall(event);
       loadData(); // refresh stats & recent calls
+      posthog.capture("call_filtered");
     });
     return () => {
       subscription?.remove();
     };
   }, [loadData]);
+
+  const handleEnablePress = useCallback(() => {
+    Alert.alert(
+      t("service.enableTitle"),
+      t("service.enableInstructions"),
+      [
+        { text: t("common.cancel"), style: "cancel" },
+        { text: t("service.continue"), onPress: requestEnable },
+      ]
+    );
+  }, [requestEnable, t]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -86,7 +101,7 @@ export default function DashboardScreen() {
       <ServiceStatusBanner
         enabled={enabled}
         loading={statusLoading}
-        onEnable={requestEnable}
+        onEnable={handleEnablePress}
       />
 
       {blockedCall ? (

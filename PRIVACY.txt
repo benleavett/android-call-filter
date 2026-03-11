@@ -1,29 +1,29 @@
-Privacy Policy
-
-Simple Call Blocker
-Published by Cadence Digital -- cadencedigital.fr
-Last updated: 27 January 2026
-
-
 Summary
 
-Simple Call Blocker operates entirely on your device. It does not collect, transmit, or share any personal data.
+Simple Call Blocker screens and blocks unwanted incoming calls entirely on your device. Your call filters, blocked call log, and preferences never leave your phone.
 
 
 Data We Collect
 
-None. The App does not send any data to Cadence Digital or any third party.
+Most data stays on your device and is never transmitted. The one exception is anonymised usage analytics described below.
 
+Data stored locally on your device (never transmitted):
 
-Data Stored On Your Device
-
-The following data is stored locally on your device and never leaves it:
-
-- Call filters -- The phone number prefixes and labels you configure, stored in the app's local storage.
-- Blocked call log -- A record of incoming calls that were blocked, including the caller's phone number, the filter that matched, and the date and time. You can clear this log at any time from within the App.
+- Call filters -- The phone number prefixes and labels you configure.
+- Blocked call log -- A record of calls that were blocked, including the caller's number, the filter matched, and the timestamp. You can clear this log at any time from within the App.
 - Preferences -- Your chosen language and country setting.
 
 All local data is deleted when you uninstall the App.
+
+
+Analytics
+
+The App uses PostHog (posthog.com) to collect anonymised usage events. This helps us understand how the app is used and improve it. The data collected is:
+
+- App launch events, including whether call screening was active at launch.
+- When a call is blocked (no phone number or personal data is sent).
+
+No phone numbers, call log entries, filter content, or personally identifiable information are sent to PostHog. PostHog data is hosted in the United States. PostHog's privacy policy is available at posthog.com/privacy.
 
 
 Permissions
@@ -40,19 +40,14 @@ Contacts
 The App does not read or access your contacts. Android's CallScreeningService API does not invoke call screening for phone numbers saved in your address book -- those calls always ring through normally.
 
 
-Third-Party Services
-
-The App does not integrate any third-party SDKs, analytics, advertising, or crash reporting services.
-
-
 Children's Privacy
 
-The App does not knowingly collect any data from anyone, including children under 13.
+The App does not knowingly collect any data from children under 13.
 
 
 Changes to This Policy
 
-We may update this Privacy Policy from time to time. The updated version will be indicated by the "Last updated" date above and will be available at cadencedigital.fr.
+We may update this Privacy Policy from time to time. The updated version will be indicated by the "Last updated" date above and will be available within the App and at cadencedigital.fr.
 
 
 Contact
@@ -61,3 +56,5 @@ If you have questions about this Privacy Policy, contact us at:
 
 Cadence Digital
 Website: cadencedigital.fr
+
+Last updated: 11 March 2026
