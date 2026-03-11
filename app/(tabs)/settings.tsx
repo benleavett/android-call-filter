@@ -16,6 +16,9 @@ import { Colors, Spacing, BorderRadius, Fonts } from "@/constants/theme";
 const LANGUAGES = [
   { code: "en", labelKey: "settings.english", flag: "EN" },
   { code: "fr", labelKey: "settings.french", flag: "FR" },
+  { code: "de", labelKey: "settings.german", flag: "DE" },
+  { code: "it", labelKey: "settings.italian", flag: "IT" },
+  { code: "es", labelKey: "settings.spanish", flag: "ES" },
 ];
 
 export default function SettingsScreen() {

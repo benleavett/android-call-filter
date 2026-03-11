@@ -33,7 +33,8 @@
     "enable": "Enable Service",
     "enableTitle": "Enable Call Screening",
     "enableInstructions": "You'll be asked to choose Simple Call Blocker as your call screening app. Select it and tap Allow to enable call blocking.",
-    "continue": "Continue"
+    "continue": "Continue",
+    "inactiveGateDesc": "No calls are being screened or blocked. Enable call screening to start protecting your phone from unwanted callers."
   },
   "filters": {
     "title": "Filters",
@@ -71,6 +72,9 @@
     "languageDesc": "Choose your preferred language",
     "english": "English",
     "french": "French",
+    "german": "German",
+    "italian": "Italian",
+    "spanish": "Spanish",
     "country": "Country",
     "countryDesc": "Sets the default country code for new filters",
     "countries": {

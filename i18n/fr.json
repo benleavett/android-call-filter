@@ -33,7 +33,8 @@
     "enable": "Activer le service",
     "enableTitle": "Activer le filtrage",
     "enableInstructions": "Vous serez invité à choisir Simple Call Blocker comme application de filtrage. Sélectionnez-la et appuyez sur Autoriser.",
-    "continue": "Continuer"
+    "continue": "Continuer",
+    "inactiveGateDesc": "Aucun appel n'est filtré ni bloqué. Activez le filtrage des appels pour protéger votre téléphone contre les appels indésirables."
   },
   "filters": {
     "title": "Filtres",
@@ -71,6 +72,9 @@
     "languageDesc": "Choisissez votre langue préférée",
     "english": "Anglais",
     "french": "Français",
+    "german": "Allemand",
+    "italian": "Italien",
+    "spanish": "Espagnol",
     "country": "Pays",
     "countryDesc": "Définit l'indicatif pays par défaut pour les nouveaux filtres",
     "countries": {
