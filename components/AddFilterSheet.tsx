@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
-import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { Colors, Spacing, BorderRadius, Fonts } from "@/constants/theme";
 import { getPreferredDialCode } from "@/constants/countryCodes";
 import { formatLocalNumber, getMinLocalDigits } from "@/constants/phoneFormat";
 
@@ -203,13 +203,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.onSurface,
     marginBottom: Spacing.lg,
   },
   inputLabel: {
     fontSize: 13,
-    fontWeight: "500",
+    fontFamily: Fonts.medium,
     color: Colors.onSurfaceVariant,
     marginBottom: Spacing.xs,
   },
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
   },
   dialCodeInput: {
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.onSurface,
     paddingHorizontal: Spacing.md,
     paddingVertical: 14,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     fontSize: 15,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.onSurfaceVariant,
   },
   addButton: {
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     fontSize: 15,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.onPrimary,
   },
 });

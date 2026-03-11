@@ -2,7 +2,7 @@ import { Tabs } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Colors } from "@/constants/theme";
+import { Colors, Fonts } from "@/constants/theme";
 
 export default function TabLayout() {
   const { t } = useTranslation();
@@ -16,19 +16,24 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: Colors.surfaceContainerLow,
           borderTopColor: Colors.outlineVariant,
-          paddingBottom: insets.bottom + 4,
-          paddingTop: 4,
+          paddingBottom: insets.bottom + 8,
+          paddingTop: 10,
+          height: 60 + insets.bottom,
         },
         tabBarLabelStyle: {
           fontSize: 12,
-          fontWeight: "500",
+          fontFamily: Fonts.medium,
+          marginTop: 2,
+        },
+        tabBarIconStyle: {
+          marginBottom: -2,
         },
         headerStyle: {
           backgroundColor: Colors.surface,
         },
         headerTintColor: Colors.onSurface,
         headerTitleStyle: {
-          fontWeight: "600",
+          fontFamily: Fonts.semiBold,
           fontSize: 20,
         },
         headerShadowVisible: false,
@@ -37,7 +42,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: t("settings.appName"),
+          headerShown: false,
           tabBarLabel: t("tabs.home"),
           tabBarIcon: ({ color, focused }) => (
             <MaterialCommunityIcons

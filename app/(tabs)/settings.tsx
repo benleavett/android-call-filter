@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { View, Text, Pressable, ScrollView, StyleSheet } from "react-native";
+import { View, Text, Image, Pressable, ScrollView, StyleSheet } from "react-native";
 import { useTranslation } from "react-i18next";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Constants from "expo-constants";
@@ -11,7 +11,7 @@ import {
 } from "@/constants/countryCodes";
 import { PRIVACY_POLICY, TERMS_AND_CONDITIONS } from "@/constants/legalDocs";
 import { LegalModal } from "@/components/LegalModal";
-import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { Colors, Spacing, BorderRadius, Fonts } from "@/constants/theme";
 
 const LANGUAGES = [
   { code: "en", labelKey: "settings.english", flag: "EN" },
@@ -169,10 +169,9 @@ export default function SettingsScreen() {
           <Text style={styles.sectionTitle}>{t("settings.about")}</Text>
           <View style={styles.aboutCard}>
             <View style={styles.aboutRow}>
-              <MaterialCommunityIcons
-                name="phone-off"
-                size={32}
-                color={Colors.primary}
+              <Image
+                source={require("@/assets/logo_512.png")}
+                style={styles.aboutLogo}
               />
               <View style={styles.aboutText}>
                 <Text style={styles.appName}>{t("settings.appName")}</Text>
@@ -253,7 +252,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.onSurface,
     marginBottom: Spacing.xs,
   },
@@ -281,7 +280,7 @@ const styles = StyleSheet.create({
   },
   triggerFlag: {
     fontSize: 16,
-    fontWeight: "700",
+    fontFamily: Fonts.bold,
     color: Colors.onSurfaceVariant,
     width: 28,
     textAlign: "center",
@@ -289,12 +288,12 @@ const styles = StyleSheet.create({
   triggerLabel: {
     flex: 1,
     fontSize: 15,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.onSurface,
   },
   triggerDetail: {
     fontSize: 14,
-    fontWeight: "500",
+    fontFamily: Fonts.medium,
     color: Colors.onSurfaceVariant,
   },
 
@@ -323,7 +322,7 @@ const styles = StyleSheet.create({
   },
   itemFlag: {
     fontSize: 14,
-    fontWeight: "700",
+    fontFamily: Fonts.bold,
     color: Colors.onSurfaceVariant,
     width: 28,
     textAlign: "center",
@@ -331,17 +330,17 @@ const styles = StyleSheet.create({
   itemLabel: {
     flex: 1,
     fontSize: 14,
-    fontWeight: "500",
+    fontFamily: Fonts.medium,
     color: Colors.onSurface,
   },
   itemLabelActive: {
     color: Colors.primary,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
   },
   itemDetail: {
     fontSize: 13,
     color: Colors.onSurfaceVariant,
-    fontWeight: "500",
+    fontFamily: Fonts.medium,
   },
   itemDetailActive: {
     color: Colors.primary,
@@ -361,12 +360,17 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
     padding: Spacing.md,
   },
+  aboutLogo: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+  },
   aboutText: {
     flex: 1,
   },
   appName: {
     fontSize: 17,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.onSurface,
   },
   version: {
@@ -395,7 +399,7 @@ const styles = StyleSheet.create({
   legalText: {
     flex: 1,
     fontSize: 14,
-    fontWeight: "500",
+    fontFamily: Fonts.medium,
     color: Colors.onSurface,
   },
 });

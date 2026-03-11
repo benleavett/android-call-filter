@@ -2,10 +2,21 @@ import { useEffect, useState } from "react";
 import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { View, ActivityIndicator, StyleSheet, Text } from "react-native";
 import { initI18n } from "@/i18n";
 import { seedDefaultFilters } from "@/hooks/useSeedDefaults";
-import { Colors } from "@/constants/theme";
+import { Colors, Fonts } from "@/constants/theme";
+import {
+  useFonts,
+  DMSans_400Regular,
+  DMSans_500Medium,
+  DMSans_600SemiBold,
+  DMSans_700Bold,
+} from "@expo-google-fonts/dm-sans";
+
+// Apply DM Sans as the default font for all Text components
+(Text as any).defaultProps = (Text as any).defaultProps ?? {};
+(Text as any).defaultProps.style = { fontFamily: Fonts.regular };
 import { PostHogProvider, usePostHog } from "posthog-react-native";
 import { isServiceEnabled } from "@/modules/call-screening";
 
@@ -27,6 +38,12 @@ function AppInit() {
 
 export default function RootLayout() {
   const [ready, setReady] = useState(false);
+  const [fontsLoaded] = useFonts({
+    DMSans_400Regular,
+    DMSans_500Medium,
+    DMSans_600SemiBold,
+    DMSans_700Bold,
+  });
 
   useEffect(() => {
     async function init() {
@@ -36,7 +53,7 @@ export default function RootLayout() {
     init().then(() => setReady(true));
   }, []);
 
-  if (!ready) {
+  if (!ready || !fontsLoaded) {
     return (
       <View style={styles.loading}>
         <ActivityIndicator size="large" color={Colors.primary} />

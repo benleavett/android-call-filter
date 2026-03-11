@@ -1,6 +1,6 @@
 import { View, Text, Switch, StyleSheet, Pressable } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { Colors, Spacing, BorderRadius, Fonts } from "@/constants/theme";
 import { formatFilterLabel } from "@/constants/phoneFormat";
 import type { FilterEntry } from "@/modules/call-screening";
 
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   },
   filter: {
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.onSurface,
   },
   label: {

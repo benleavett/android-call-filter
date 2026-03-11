@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import {
   View,
   Text,
+  Image,
   ScrollView,
   RefreshControl,
   StyleSheet,
@@ -9,6 +10,7 @@ import {
 } from "react-native";
 import { useFocusEffect, router } from "expo-router";
 import { useTranslation } from "react-i18next";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatsCard } from "@/components/StatsCard";
 import { CallLogItem } from "@/components/CallLogItem";
 import { BlockedCallCard } from "@/components/BlockedCallCard";
@@ -23,12 +25,13 @@ import {
   type CallLogEntry,
   type CallBlockedEvent,
 } from "@/modules/call-screening";
-import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { Colors, Spacing, BorderRadius, Fonts } from "@/constants/theme";
 import { usePostHog } from "posthog-react-native";
 
 export default function DashboardScreen() {
   const { t } = useTranslation();
   const posthog = usePostHog();
+  const insets = useSafeAreaInsets();
   const {
     enabled,
     loading: statusLoading,
@@ -98,6 +101,11 @@ export default function DashboardScreen() {
         />
       }
     >
+      <View style={[styles.header, { paddingTop: insets.top + Spacing.md }]}>
+        <Image source={require("@/assets/logo_512.png")} style={styles.logo} />
+        <Text style={styles.appName}>{t("settings.appName")}</Text>
+      </View>
+
       <ServiceStatusBanner
         enabled={enabled}
         loading={statusLoading}
@@ -166,6 +174,21 @@ const styles = StyleSheet.create({
   content: {
     paddingBottom: 48,
   },
+  header: {
+    alignItems: "center",
+    paddingBottom: Spacing.md,
+    gap: Spacing.sm,
+  },
+  logo: {
+    width: 64,
+    height: 64,
+    borderRadius: 16,
+  },
+  appName: {
+    fontSize: 20,
+    fontFamily: Fonts.bold,
+    color: Colors.onSurface,
+  },
   statsList: {
     gap: Spacing.sm,
     paddingHorizontal: Spacing.md,
@@ -176,7 +199,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.onSurface,
     paddingHorizontal: Spacing.md,
     marginBottom: Spacing.sm,

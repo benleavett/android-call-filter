@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { Colors, Spacing, BorderRadius, Fonts } from "@/constants/theme";
 import { formatPhoneNumber } from "@/constants/phoneFormat";
 import type { CallLogEntry } from "@/modules/call-screening";
 
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
   phoneNumber: {
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.onSurface,
     marginBottom: 4,
   },
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   filterText: {
     fontSize: 11,
-    fontWeight: "500",
+    fontFamily: Fonts.medium,
     color: Colors.onPrimaryContainer,
   },
   timestamp: {

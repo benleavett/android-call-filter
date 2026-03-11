@@ -74,6 +74,13 @@ export const Typography = {
   labelSmall: { fontSize: 11, lineHeight: 16, fontWeight: "500" as const },
 };
 
+export const Fonts = {
+  regular: "DMSans_400Regular",
+  medium: "DMSans_500Medium",
+  semiBold: "DMSans_600SemiBold",
+  bold: "DMSans_700Bold",
+};
+
 export const Elevation = {
   level0: {
     shadowColor: "transparent",

@@ -1,6 +1,6 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Colors, Spacing, BorderRadius, Elevation } from "@/constants/theme";
+import { Colors, Spacing, BorderRadius, Elevation, Fonts } from "@/constants/theme";
 
 interface StatsCardProps {
   title: string;
@@ -52,13 +52,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 13,
-    fontWeight: "500",
+    fontFamily: Fonts.medium,
     color: Colors.onSurfaceVariant,
     marginBottom: 2,
   },
   value: {
     fontSize: 22,
-    fontWeight: "700",
+    fontFamily: Fonts.bold,
     color: Colors.onSurface,
   },
 });

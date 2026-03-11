@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { View, Text, Pressable, Animated, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { Colors, Spacing, BorderRadius, Fonts } from "@/constants/theme";
 
 interface BlockedCallCardProps {
   phoneNumber: string;
@@ -101,13 +101,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.error,
     marginBottom: 2,
   },
   phoneNumber: {
     fontSize: 16,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.onSurface,
   },
   matchInfo: {

@@ -1,7 +1,7 @@
 import { View, Text, Pressable, StyleSheet, ActivityIndicator } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { Colors, Spacing, BorderRadius, Fonts } from "@/constants/theme";
 
 interface ServiceStatusBannerProps {
   enabled: boolean | null;
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
   },
   activeText: {
     color: Colors.success,
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   },
   enableButtonText: {
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.onPrimary,
   },
 });

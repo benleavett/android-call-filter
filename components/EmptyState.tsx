@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Colors, Spacing } from "@/constants/theme";
+import { Colors, Spacing, Fonts } from "@/constants/theme";
 
 interface EmptyStateProps {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: "600",
+    fontFamily: Fonts.semiBold,
     color: Colors.onSurfaceVariant,
     marginTop: Spacing.md,
     textAlign: "center",
