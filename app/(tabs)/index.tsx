@@ -3,11 +3,13 @@ import {
   View,
   Text,
   Image,
+  Pressable,
   ScrollView,
   RefreshControl,
   StyleSheet,
   Alert,
 } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect, router } from "expo-router";
 import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -89,80 +91,106 @@ export default function DashboardScreen() {
     setRefreshing(false);
   };
 
+  const header = (
+    <View style={[styles.header, { paddingTop: insets.top + Spacing.md }]}>
+      <Image source={require("@/assets/logo_512.png")} style={styles.logo} />
+      <Text style={styles.appName}>{t("settings.appName")}</Text>
+    </View>
+  );
+
+  if (enabled === false) {
+    return (
+      <View style={styles.container}>
+        <View style={[styles.inactiveGate, { paddingTop: insets.top }]}>
+          <Image source={require("@/assets/logo_512.png")} style={styles.logo} />
+          <Text style={styles.appName}>{t("settings.appName")}</Text>
+          <Text style={styles.inactiveTitle}>{t("service.inactive")}</Text>
+          <Text style={styles.inactiveDesc}>{t("service.inactiveGateDesc")}</Text>
+          <Pressable style={styles.enableButton} onPress={handleEnablePress}>
+            <MaterialCommunityIcons
+              name="shield-check"
+              size={20}
+              color={Colors.onPrimary}
+            />
+            <Text style={styles.enableButtonText}>{t("service.enable")}</Text>
+          </Pressable>
+        </View>
+      </View>
+    );
+  }
+
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.content}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={handleRefresh}
-          colors={[Colors.primary]}
-        />
-      }
-    >
-      <View style={[styles.header, { paddingTop: insets.top + Spacing.md }]}>
-        <Image source={require("@/assets/logo_512.png")} style={styles.logo} />
-        <Text style={styles.appName}>{t("settings.appName")}</Text>
-      </View>
-
-      <ServiceStatusBanner
-        enabled={enabled}
-        loading={statusLoading}
-        onEnable={handleEnablePress}
-      />
-
-      {blockedCall ? (
-        <BlockedCallCard
-          phoneNumber={blockedCall.phoneNumber}
-          matchedFilter={blockedCall.matchedFilter}
-          onDismiss={() => setBlockedCall(null)}
-        />
-      ) : null}
-
-      <View style={styles.statsList}>
-        <StatsCard
-          title={t("dashboard.totalFiltered")}
-          value={stats?.totalFiltered ?? 0}
-          icon="phone-off"
-          color={Colors.primary}
-          onPress={() => router.navigate("/log")}
-        />
-        <StatsCard
-          title={t("dashboard.today")}
-          value={stats?.todayCount ?? 0}
-          icon="calendar-today"
-          color={Colors.secondary}
-          onPress={() => router.navigate("/log")}
-        />
-        <StatsCard
-          title={t("dashboard.activeFilters")}
-          value={stats?.activeFilters ?? 0}
-          icon="filter-check"
-          color={Colors.tertiary}
-          onPress={() => router.navigate("/filters")}
-        />
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          {t("dashboard.recentActivity")}
-        </Text>
-        {recentCalls.length > 0 ? (
-          <View style={styles.recentList}>
-            {recentCalls.map((call) => (
-              <CallLogItem key={call.id} entry={call} />
-            ))}
-          </View>
-        ) : (
-          <EmptyState
-            icon="phone-check-outline"
-            title={t("dashboard.noRecentActivity")}
-            message={t("dashboard.noRecentActivityDesc")}
+    <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            colors={[Colors.primary]}
           />
-        )}
-      </View>
-    </ScrollView>
+        }
+      >
+        {header}
+
+        <ServiceStatusBanner
+          enabled={enabled}
+          loading={statusLoading}
+          onEnable={handleEnablePress}
+        />
+
+        {blockedCall ? (
+          <BlockedCallCard
+            phoneNumber={blockedCall.phoneNumber}
+            matchedFilter={blockedCall.matchedFilter}
+            onDismiss={() => setBlockedCall(null)}
+          />
+        ) : null}
+
+        <View style={styles.statsList}>
+          <StatsCard
+            title={t("dashboard.totalFiltered")}
+            value={stats?.totalFiltered ?? 0}
+            icon="phone-off"
+            color={Colors.primary}
+            onPress={() => router.navigate("/log")}
+          />
+          <StatsCard
+            title={t("dashboard.today")}
+            value={stats?.todayCount ?? 0}
+            icon="calendar-today"
+            color={Colors.secondary}
+            onPress={() => router.navigate("/log")}
+          />
+          <StatsCard
+            title={t("dashboard.activeFilters")}
+            value={stats?.activeFilters ?? 0}
+            icon="filter-check"
+            color={Colors.tertiary}
+            onPress={() => router.navigate("/filters")}
+          />
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>
+            {t("dashboard.recentActivity")}
+          </Text>
+          {recentCalls.length > 0 ? (
+            <View style={styles.recentList}>
+              {recentCalls.map((call) => (
+                <CallLogItem key={call.id} entry={call} />
+              ))}
+            </View>
+          ) : (
+            <EmptyState
+              icon="phone-check-outline"
+              title={t("dashboard.noRecentActivity")}
+              message={t("dashboard.noRecentActivityDesc")}
+            />
+          )}
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -173,6 +201,43 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingBottom: 48,
+  },
+  inactiveGate: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: Spacing.xl,
+    paddingBottom: Spacing.xxl,
+    gap: Spacing.md,
+  },
+  inactiveTitle: {
+    fontSize: 22,
+    fontFamily: Fonts.bold,
+    color: Colors.onSurface,
+    textAlign: "center",
+    marginTop: Spacing.lg,
+  },
+  inactiveDesc: {
+    fontSize: 15,
+    fontFamily: Fonts.regular,
+    color: Colors.onSurfaceVariant,
+    textAlign: "center",
+    lineHeight: 22,
+  },
+  enableButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+    backgroundColor: Colors.primary,
+    paddingVertical: 14,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.xl,
+    marginTop: Spacing.sm,
+  },
+  enableButtonText: {
+    fontSize: 16,
+    fontFamily: Fonts.semiBold,
+    color: Colors.onPrimary,
   },
   header: {
     alignItems: "center",
