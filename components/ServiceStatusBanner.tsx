@@ -40,7 +40,7 @@ export function ServiceStatusBanner({
   }
 
   return (
-    <View style={[styles.banner, styles.inactiveBanner]}>
+    <Pressable style={[styles.banner, styles.inactiveBanner]} onPress={onEnable}>
       <View style={styles.inactiveContent}>
         <MaterialCommunityIcons
           name="shield-alert-outline"
@@ -55,11 +55,13 @@ export function ServiceStatusBanner({
             {t("service.enableDesc")}
           </Text>
         </View>
+        <MaterialCommunityIcons
+          name="chevron-right"
+          size={20}
+          color={Colors.warning}
+        />
       </View>
-      <Pressable style={styles.enableButton} onPress={onEnable}>
-        <Text style={styles.enableButtonText}>{t("service.enable")}</Text>
-      </Pressable>
-    </View>
+    </Pressable>
   );
 }
 

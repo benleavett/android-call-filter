@@ -62,7 +62,7 @@ export default function CallLogScreen() {
         options={{
           headerRight: () =>
             entries.length > 0 ? (
-              <Pressable onPress={handleClear} hitSlop={8}>
+              <Pressable onPress={handleClear} hitSlop={8} style={{ padding: 8, marginRight: -4 }}>
                 <MaterialCommunityIcons
                   name="delete-sweep-outline"
                   size={24}

@@ -44,8 +44,5 @@
         "projectId": "e8c89a9f-3635-44e9-9578-52a3e8ff0b01"
       }
     },
-    "ios": {
-      "bundleIdentifier": "com.cadence.callblocker"
-    }
   }
 }

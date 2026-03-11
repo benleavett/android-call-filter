@@ -37,7 +37,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: t("tabs.dashboard"),
+          title: t("settings.appName"),
+          tabBarLabel: t("tabs.home"),
           tabBarIcon: ({ color, focused }) => (
             <MaterialCommunityIcons
               name={focused ? "view-dashboard" : "view-dashboard-outline"}
