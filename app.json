@@ -4,14 +4,14 @@
     "slug": "android-call-filter",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/logo_512.png",
     "scheme": "callfilter",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash-icon.png",
+      "image": "./assets/logo_512.png",
       "resizeMode": "contain",
-      "backgroundColor": "#3949ab"
+      "backgroundColor": "#ffffff"
     },
     "android": {
       "adaptiveIcon": {
