@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { formatPhoneNumber } from "@/constants/phoneFormat";
 import type { CallLogEntry } from "@/modules/call-screening";
 
 interface CallLogItemProps {
@@ -38,7 +39,7 @@ export function CallLogItem({ entry }: CallLogItemProps) {
       </View>
       <View style={styles.content}>
         <Text style={styles.phoneNumber} numberOfLines={1}>
-          {entry.phoneNumber}
+          {formatPhoneNumber(entry.phoneNumber)}
         </Text>
         <View style={styles.metaRow}>
           <View style={styles.filterBadge}>

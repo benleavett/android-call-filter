@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -7,12 +7,12 @@ import {
   Modal,
   StyleSheet,
   KeyboardAvoidingView,
-  Platform,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useTranslation } from "react-i18next";
 import { Colors, Spacing, BorderRadius } from "@/constants/theme";
 import { getPreferredDialCode } from "@/constants/countryCodes";
+import { formatLocalNumber, getMinLocalDigits } from "@/constants/phoneFormat";
 
 interface AddFilterSheetProps {
   visible: boolean;
@@ -25,33 +25,53 @@ export function AddFilterSheet({ visible, onClose, onAdd }: AddFilterSheetProps)
   const insets = useSafeAreaInsets();
   const [filter, setFilter] = useState("");
   const [label, setLabel] = useState("");
-  const [countryCode, setCountryCode] = useState("");
+  const [dialCode, setDialCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const numberInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
     if (visible) {
-      getPreferredDialCode().then(setCountryCode);
+      getPreferredDialCode().then(setDialCode);
+      setFilter("");
+      setLabel("");
+      setError(null);
     }
   }, [visible]);
 
+  // Build a formatted preview of the filter as it will appear after saving.
+  function buildPreview(): string | null {
+    const digits = filter.replace(/\s/g, "");
+    if (!digits) return null;
+    const formatted = formatLocalNumber(digits, dialCode);
+    const isPrefix = digits.length < getMinLocalDigits(dialCode);
+    const suffix = isPrefix ? " *" : "";
+    return dialCode ? `${dialCode} ${formatted}${suffix}` : `${formatted}${suffix}`;
+  }
+
   const handleAdd = async () => {
+    const cleanedCode = dialCode.trim();
+    if (!cleanedCode || !/^\+\d{1,4}$/.test(cleanedCode)) {
+      setError(t("filters.invalidCountryCode"));
+      return;
+    }
     const cleaned = filter.replace(/\s/g, "");
-    if (!cleaned || !/^[\d]+$/.test(cleaned)) {
+    if (!cleaned || !/^\d+$/.test(cleaned)) {
       setError(t("filters.invalidError"));
+      return;
+    }
+    if (!cleaned.startsWith("0")) {
+      setError(t("filters.invalidLeadingZero"));
       return;
     }
 
     setSubmitting(true);
     setError(null);
 
-    const success = await onAdd(cleaned, label.trim(), countryCode.trim());
+    const success = await onAdd(cleaned, label.trim(), dialCode.trim());
     setSubmitting(false);
 
     if (success) {
-      setFilter("");
-      setLabel("");
-      setError(null);
       onClose();
     } else {
       setError(t("filters.duplicateError"));
@@ -65,6 +85,8 @@ export function AddFilterSheet({ visible, onClose, onAdd }: AddFilterSheetProps)
     onClose();
   };
 
+  const preview = buildPreview();
+
   return (
     <Modal
       visible={visible}
@@ -73,7 +95,7 @@ export function AddFilterSheet({ visible, onClose, onAdd }: AddFilterSheetProps)
       onRequestClose={handleClose}
     >
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior="height"
         style={styles.overlay}
       >
         <Pressable style={styles.backdrop} onPress={handleClose} />
@@ -83,9 +105,22 @@ export function AddFilterSheet({ visible, onClose, onAdd }: AddFilterSheetProps)
 
           <Text style={styles.inputLabel}>{t("filters.numberLabel")}</Text>
           <View style={[styles.numberRow, error ? styles.numberRowError : null]}>
-            <Text style={styles.countryCodePrefix}>{countryCode}</Text>
-            <View style={styles.divider} />
+            {/* Editable dial code */}
             <TextInput
+              style={styles.dialCodeInput}
+              value={dialCode}
+              onChangeText={(text) => {
+                setDialCode(text);
+                setError(null);
+              }}
+              keyboardType="phone-pad"
+              returnKeyType="next"
+              onSubmitEditing={() => numberInputRef.current?.focus()}
+            />
+            <View style={styles.divider} />
+            {/* Local number */}
+            <TextInput
+              ref={numberInputRef}
               style={styles.numberInput}
               value={filter}
               onChangeText={(text) => {
@@ -94,10 +129,16 @@ export function AddFilterSheet({ visible, onClose, onAdd }: AddFilterSheetProps)
               }}
               placeholder={t("filters.numberPlaceholder")}
               placeholderTextColor={Colors.outline}
-              keyboardType="phone-pad"
+              keyboardType="number-pad"
               autoFocus
             />
           </View>
+
+          {/* Formatted preview */}
+          {preview ? (
+            <Text style={styles.previewText}>{preview}</Text>
+          ) : null}
+
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
           <Text style={styles.inputLabel}>{t("filters.labelLabel")}</Text>
@@ -179,17 +220,18 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
     borderWidth: 1,
     borderColor: Colors.outlineVariant,
-    marginBottom: Spacing.md,
+    marginBottom: Spacing.xs,
   },
   numberRowError: {
     borderColor: Colors.error,
   },
-  countryCodePrefix: {
+  dialCodeInput: {
     fontSize: 16,
     fontWeight: "600",
-    color: Colors.onSurfaceVariant,
+    color: Colors.onSurface,
     paddingHorizontal: Spacing.md,
     paddingVertical: 14,
+    minWidth: 60,
   },
   divider: {
     width: 1,
@@ -204,6 +246,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     paddingVertical: 14,
   },
+  previewText: {
+    fontSize: 13,
+    color: Colors.onSurfaceVariant,
+    marginBottom: Spacing.sm,
+    fontVariant: ["tabular-nums"],
+  },
+  errorText: {
+    fontSize: 12,
+    color: Colors.error,
+    marginBottom: Spacing.md,
+  },
   input: {
     backgroundColor: Colors.surfaceContainerHigh,
     borderRadius: BorderRadius.sm,
@@ -214,12 +267,6 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     borderWidth: 1,
     borderColor: Colors.outlineVariant,
-  },
-  errorText: {
-    fontSize: 12,
-    color: Colors.error,
-    marginTop: -Spacing.sm,
-    marginBottom: Spacing.md,
   },
   buttons: {
     flexDirection: "row",

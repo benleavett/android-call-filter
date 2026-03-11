@@ -1,16 +1,8 @@
 import { View, Text, Switch, StyleSheet, Pressable } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { formatFilterLabel } from "@/constants/phoneFormat";
 import type { FilterEntry } from "@/modules/call-screening";
-
-function formatFrenchNumber(digits: string): string {
-  return digits.match(/.{1,2}/g)?.join(" ") ?? digits;
-}
-
-function formatFilterDisplay(filter: string, countryCode: string): string {
-  const formatted = countryCode === "+33" ? formatFrenchNumber(filter) : filter;
-  return countryCode ? `${countryCode} ${formatted}` : formatted;
-}
 
 interface FilterItemProps {
   entry: FilterEntry;
@@ -34,7 +26,7 @@ export function FilterItem({ entry, onToggle, onDelete }: FilterItemProps) {
             style={[styles.filter, !entry.enabled && styles.disabledText]}
             numberOfLines={1}
           >
-            {formatFilterDisplay(entry.filter, entry.countryCode)}
+            {formatFilterLabel(entry.filter, entry.countryCode)}
           </Text>
           {entry.label ? (
             <Text
