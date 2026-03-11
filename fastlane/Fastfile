@@ -1,0 +1,40 @@
+default_platform(:android)
+
+platform :android do
+  desc "Push store listing metadata to Google Play (all locales)"
+  lane :update_listing do |options|
+    locale = options[:locale]
+
+    if locale
+      # Copy just the requested locale into a temp dir and upload from there
+      require "tmpdir"
+      tmpdir = Dir.mktmpdir
+      src = File.join(Dir.pwd, "metadata/android/#{locale}")
+      UI.user_error!("Locale folder not found: #{src}") unless File.directory?(src)
+      FileUtils.cp_r(src, "#{tmpdir}/#{locale}")
+      metadata_path = tmpdir
+    else
+      metadata_path = File.join(Dir.pwd, "metadata/android")
+    end
+
+    version_codes = google_play_track_version_codes(
+      package_name: "com.cadence.callblocker",
+      track: "internal",
+      json_key: "./fastlane/service-account.json"
+    )
+    supply(
+      package_name: "com.cadence.callblocker",
+      metadata_path: metadata_path,
+      track: "internal",
+      version_code: version_codes.max,
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_metadata: false,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  ensure
+    FileUtils.remove_entry(tmpdir) if locale && tmpdir
+  end
+end

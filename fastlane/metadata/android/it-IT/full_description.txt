@@ -1,0 +1,23 @@
+Simple Call Blocker ti permette di filtrare le chiamate in arrivo per prefisso di numero di telefono. Aggiungi le cifre iniziali dei numeri che vuoi bloccare e l'app rifiuta silenziosamente le chiamate corrispondenti prima che il telefono squilli.
+
+COME FUNZIONA
+Configura i filtri numerici in pochi tocchi. Quando arriva una chiamata, l'app confronta il numero in arrivo con i tuoi filtri. Se corrisponde, la chiamata viene rifiutata automaticamente. Se non corrisponde, la chiamata squilla normalmente.
+
+FUNZIONALITÀ
+• Blocca le chiamate per prefisso — filtra intere fasce di numeri con poche cifre
+• Supporto prefisso internazionale per filtro — funziona con numeri internazionali e nazionali
+• Attiva o disattiva i singoli filtri senza eliminarli
+• Registro chiamate bloccate — visualizza ogni chiamata filtrata con data e ora
+• Dashboard in tempo reale — statistiche e chiamate bloccate recenti a colpo d'occhio
+• Notifica per ogni chiamata bloccata
+• Prefissi spam francesi comuni precaricati (modificabili)
+• Disponibile in inglese, francese, tedesco, italiano e spagnolo
+
+PRIVACY BY DESIGN
+Tutto rimane sul tuo dispositivo. Nessun account, nessun cloud, nessuna pubblicità. I tuoi filtri e la cronologia delle chiamate sono archiviati localmente e non vengono mai trasmessi.
+
+L'app non accede ai tuoi contatti. Android consente automaticamente le chiamate dai numeri presenti nella rubrica — squillano sempre normalmente.
+
+REQUISITI
+• Android 10 o versioni successive
+• Ti verrà chiesto di impostare Simple Call Blocker come app di screening delle chiamate alla prima attivazione del servizio

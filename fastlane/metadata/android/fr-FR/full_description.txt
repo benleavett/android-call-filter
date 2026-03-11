@@ -1,0 +1,23 @@
+Stop Appels vous permet de filtrer les appels entrants par préfixe de numéro de téléphone. Ajoutez les premiers chiffres des numéros que vous souhaitez bloquer, et l'application rejette silencieusement les appels correspondants avant que votre téléphone sonne.
+
+FONCTIONNEMENT
+Configurez des filtres de numéros en quelques clics. Lorsqu'un appel arrive, l'application compare le numéro entrant à vos filtres. S'il correspond, l'appel est rejeté automatiquement. Sinon, l'appel passe normalement.
+
+FONCTIONNALITÉS
+• Bloquer les appels par préfixe — filtrez des plages entières de numéros avec quelques chiffres
+• Prise en charge des indicatifs par filtre — fonctionne avec les numéros internationaux et nationaux
+• Activer ou désactiver les filtres individuellement sans les supprimer
+• Journal des appels bloqués — consultez chaque appel filtré avec horodatage
+• Tableau de bord en temps réel — statistiques et appels bloqués récents en un coup d'œil
+• Notification pour chaque appel bloqué
+• Préfixes de spam français courants préchargés (modifiables)
+• Disponible en anglais, français, allemand, italien et espagnol
+
+CONÇU POUR LA CONFIDENTIALITÉ
+Tout reste sur votre appareil. Aucun compte, aucun cloud, aucune publicité. Vos filtres et l'historique des appels sont stockés localement et ne sont jamais transmis.
+
+L'application n'accède pas à vos contacts. Android autorise automatiquement les appels des numéros présents dans votre répertoire — ils passent toujours normalement.
+
+CONFIGURATION REQUISE
+• Android 10 ou version ultérieure
+• Vous serez invité à définir Stop Appels comme application de filtrage des appels lors de la première activation du service

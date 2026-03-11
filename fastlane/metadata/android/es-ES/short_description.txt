@@ -1,0 +1,1 @@
+Filtra llamadas entrantes por número o prefijo. Ningún dato sale de tu teléfono.

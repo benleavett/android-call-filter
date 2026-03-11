@@ -1,0 +1,23 @@
+Simple Call Blocker te permite filtrar las llamadas entrantes por prefijo de número de teléfono. Añade los primeros dígitos de los números que quieres bloquear y la app rechaza silenciosamente las llamadas coincidentes antes de que tu teléfono suene.
+
+CÓMO FUNCIONA
+Configura filtros de números con unos pocos toques. Cuando llega una llamada, la app compara el número entrante con tus filtros. Si coincide, la llamada se rechaza automáticamente. Si no coincide, la llamada suena con normalidad.
+
+CARACTERÍSTICAS
+• Bloquea llamadas por prefijo de número — filtra rangos enteros de números con unos pocos dígitos
+• Código de país por filtro — compatible con números internacionales y nacionales
+• Activa o desactiva filtros individuales sin eliminarlos
+• Registro de llamadas bloqueadas — consulta cada llamada filtrada con su marca de tiempo
+• Panel en tiempo real — estadísticas y llamadas bloqueadas recientes de un vistazo
+• Notificación por cada llamada bloqueada
+• Prefijos de spam franceses comunes precargados (editables)
+• Disponible en inglés, francés, alemán, italiano y español
+
+PRIVACIDAD POR DISEÑO
+Todo permanece en tu dispositivo. Sin cuentas, sin nube, sin anuncios. Tus filtros e historial de llamadas se almacenan localmente y nunca se transmiten.
+
+La app no accede a tus contactos. Android permite automáticamente las llamadas de números de tu agenda — siempre pasan con normalidad.
+
+REQUISITOS
+• Android 10 o posterior
+• Se te pedirá que establezcas Simple Call Blocker como app de cribado de llamadas la primera vez que actives el servicio

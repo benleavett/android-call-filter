@@ -1,0 +1,23 @@
+Simple Call Blocker ermöglicht es Ihnen, eingehende Anrufe nach Telefonnummernpräfix zu filtern. Geben Sie die Anfangsziffern der Nummern ein, die Sie blockieren möchten, und die App lehnt passende Anrufe lautlos ab, bevor Ihr Telefon klingelt.
+
+FUNKTIONSWEISE
+Richten Sie Nummernfilter mit wenigen Klicks ein. Wenn ein Anruf eingeht, vergleicht die App die eingehende Nummer mit Ihren Filtern. Stimmt sie überein, wird der Anruf automatisch abgelehnt. Stimmt sie nicht überein, klingelt der Anruf ganz normal.
+
+FUNKTIONEN
+• Anrufe nach Nummernpräfix blockieren — ganze Nummernbereiche mit wenigen Ziffern filtern
+• Ländervorwahl pro Filter — funktioniert mit internationalen und nationalen Nummern
+• Einzelne Filter aktivieren oder deaktivieren ohne sie zu löschen
+• Protokoll blockierter Anrufe — jeden gefilterten Anruf mit Zeitstempel einsehen
+• Echtzeit-Dashboard — Statistiken und zuletzt blockierte Anrufe auf einen Blick
+• Benachrichtigung für jeden blockierten Anruf
+• Häufige französische Spam-Präfixe vorinstalliert (anpassbar)
+• Verfügbar auf Englisch, Französisch, Deutsch, Italienisch und Spanisch
+
+DATENSCHUTZ ALS GRUNDPRINZIP
+Alles bleibt auf Ihrem Gerät. Kein Konto, keine Cloud, keine Werbung. Ihre Filter und der Anrufverlauf werden lokal gespeichert und nie übertragen.
+
+Die App greift nicht auf Ihre Kontakte zu. Android erlaubt automatisch Anrufe von Nummern in Ihrem Adressbuch — diese klingeln immer normal durch.
+
+VORAUSSETZUNGEN
+• Android 10 oder höher
+• Sie werden beim ersten Aktivieren des Dienstes aufgefordert, Simple Call Blocker als Anruf-Screening-App festzulegen

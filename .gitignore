@@ -40,3 +40,5 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+fastlane/service-account.json
+fastlane/report.xml

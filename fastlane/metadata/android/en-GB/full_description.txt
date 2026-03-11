@@ -1,0 +1,23 @@
+Simple Call Blocker lets you filter incoming calls by phone number prefix. Add the starting digits of numbers you want to block, and the app silently rejects matching calls before your phone rings.
+
+HOW IT WORKS
+Set up number filters with a few taps. When a call comes in, the app checks the incoming number against your filters. If it matches, the call is rejected automatically. If it doesn't match, the call rings through as normal.
+
+FEATURES
+• Block calls by number prefix — filter entire number ranges with a few digits
+• Per-filter country code support — works with international and domestic numbers
+• Enable or disable individual filters without deleting them
+• Blocked call log — see every call that was filtered, with timestamps
+• Real-time dashboard — view stats and recent blocked calls at a glance
+• Notification for each blocked call
+• Ships with common French spam number prefixes (editable)
+• English and French language support
+
+PRIVATE BY DESIGN
+Everything stays on your device. No accounts, no cloud, no ads. Your filters and call history are stored locally and never transmitted anywhere.
+
+The app does not access your contacts. Android automatically allows calls from numbers in your address book — those always ring through normally.
+
+REQUIREMENTS
+• Android 10 or later
+• You will be asked to set Simple Call Blocker as your call screening app when you first enable the service
