@@ -117,6 +117,11 @@ export async function getStats(): Promise<CallStats> {
 // Service status — native only.
 // ---------------------------------------------------------------------------
 
+export async function getSimCountryCode(): Promise<string> {
+  if (!native) return "";
+  return native.getSimCountryCode();
+}
+
 export async function isServiceEnabled(): Promise<boolean> {
   if (!native) return false;
   return native.isServiceEnabled();

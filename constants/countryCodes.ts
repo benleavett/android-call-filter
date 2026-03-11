@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getLocales } from "expo-localization";
+import { getSimCountryCode } from "@/modules/call-screening";
 
 const COUNTRY_PREF_KEY = "country_preference";
 
@@ -36,19 +37,39 @@ export const COUNTRIES: Country[] = [
   { region: "PL", dialCode: "+48" },
 ];
 
+const KNOWN_REGIONS = new Set(COUNTRIES.map((c) => c.region));
+
 const DIAL_CODE_MAP: Record<string, string> = Object.fromEntries(
   COUNTRIES.map((c) => [c.region, c.dialCode])
 );
 
-function getDeviceRegion(): string {
+function getLocaleRegion(): string {
   const locales = getLocales();
   return locales[0]?.regionCode ?? "FR";
 }
 
-/** Get the stored country region code, falling back to device locale. */
+/**
+ * Determine the best default country region:
+ * 1. SIM card country (most accurate)
+ * 2. Device locale region
+ * 3. Fallback to FR
+ */
+async function getDeviceRegion(): Promise<string> {
+  try {
+    const simRegion = await getSimCountryCode();
+    if (simRegion && KNOWN_REGIONS.has(simRegion)) return simRegion;
+  } catch {
+    // native module unavailable (Expo Go)
+  }
+  const localeRegion = getLocaleRegion();
+  return KNOWN_REGIONS.has(localeRegion) ? localeRegion : "FR";
+}
+
+/** Get the stored country region code, falling back to SIM then locale. */
 export async function getCountryPreference(): Promise<string> {
   const stored = await AsyncStorage.getItem(COUNTRY_PREF_KEY);
-  return stored ?? getDeviceRegion();
+  if (stored) return stored;
+  return getDeviceRegion();
 }
 
 /** Persist the chosen country region code. */

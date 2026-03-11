@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.role.RoleManager
 import android.content.Context
 import android.os.Build
+import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.os.bundleOf
 import expo.modules.kotlin.modules.Module
@@ -71,6 +72,13 @@ class CallScreeningExpoModule : Module() {
                 "totalFiltered" to db.getTotalCount(),
                 "todayCount" to db.getTodayCount()
             )
+        }
+
+        // --- SIM Info ---
+
+        AsyncFunction("getSimCountryCode") {
+            val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
+            tm?.simCountryIso?.uppercase() ?: ""
         }
 
         // --- Service Status ---
