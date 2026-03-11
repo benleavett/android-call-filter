@@ -45,7 +45,7 @@
     "labelPlaceholder": "z. B. Spam",
     "countryCodeLabel": "Ländervorwahl",
     "removeTitle": "Filter entfernen",
-    "removeMessage": "„{{filter}}" aus der Filterliste entfernen?",
+    "removeMessage": "\"{{filter}}\" aus der Filterliste entfernen?",
     "duplicateError": "Dieser Filter existiert bereits",
     "invalidError": "Gültige Nummer eingeben (nur Ziffern)",
     "invalidLeadingZero": "Nummer muss mit 0 beginnen",
