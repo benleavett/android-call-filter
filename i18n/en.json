@@ -11,7 +11,7 @@
     "loading": "Loading..."
   },
   "tabs": {
-    "dashboard": "Dashboard",
+    "home": "Home",
     "filters": "Filters",
     "callLog": "Call Log",
     "settings": "Settings"
@@ -29,8 +29,11 @@
   "service": {
     "active": "Call screening active",
     "inactive": "Call screening inactive",
-    "enableDesc": "Enable call screening to start filtering calls",
-    "enable": "Enable Service"
+    "enableDesc": "Tap to enable call screening",
+    "enable": "Enable Service",
+    "enableTitle": "Enable Call Screening",
+    "enableInstructions": "You'll be asked to choose Simple Call Blocker as your call screening app. Select it and tap Allow to enable call blocking.",
+    "continue": "Continue"
   },
   "filters": {
     "title": "Filters",
@@ -43,7 +46,9 @@
     "removeTitle": "Remove Filter",
     "removeMessage": "Remove \"{{filter}}\" from the filter list?",
     "duplicateError": "This filter already exists",
-    "invalidError": "Enter a valid number to filter",
+    "invalidError": "Enter a valid number (digits only)",
+    "invalidLeadingZero": "Number must start with 0",
+    "invalidCountryCode": "Enter a valid country code (e.g. +33)",
     "emptyTitle": "No Filters",
     "emptyMessage": "Add a number filter to start screening calls"
   },
@@ -97,6 +102,8 @@
     },
     "about": "About",
     "version": "Version",
-    "appName": "Simple Call Blocker"
+    "appName": "Simple Call Blocker",
+    "privacyPolicy": "Privacy Policy",
+    "termsConditions": "Terms & Conditions"
   }
 }

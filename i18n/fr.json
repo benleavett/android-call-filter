@@ -11,7 +11,7 @@
     "loading": "Chargement..."
   },
   "tabs": {
-    "dashboard": "Tableau de bord",
+    "home": "Accueil",
     "filters": "Filtres",
     "callLog": "Journal",
     "settings": "Paramètres"
@@ -29,8 +29,11 @@
   "service": {
     "active": "Filtrage des appels actif",
     "inactive": "Filtrage des appels inactif",
-    "enableDesc": "Activez le filtrage pour commencer à filtrer les appels",
-    "enable": "Activer le service"
+    "enableDesc": "Appuyez pour activer le filtrage des appels",
+    "enable": "Activer le service",
+    "enableTitle": "Activer le filtrage",
+    "enableInstructions": "Vous serez invité à choisir Simple Call Blocker comme application de filtrage. Sélectionnez-la et appuyez sur Autoriser.",
+    "continue": "Continuer"
   },
   "filters": {
     "title": "Filtres",
@@ -43,7 +46,9 @@
     "removeTitle": "Supprimer le filtre",
     "removeMessage": "Supprimer « {{filter}} » de la liste de filtrage ?",
     "duplicateError": "Ce filtre existe déjà",
-    "invalidError": "Entrez un numéro valide à filtrer",
+    "invalidError": "Entrez un numéro valide (chiffres uniquement)",
+    "invalidLeadingZero": "Le numéro doit commencer par 0",
+    "invalidCountryCode": "Entrez un indicatif valide (ex. +33)",
     "emptyTitle": "Aucun filtre",
     "emptyMessage": "Ajoutez un filtre de numéro pour commencer le filtrage des appels"
   },
@@ -97,6 +102,8 @@
     },
     "about": "À propos",
     "version": "Version",
-    "appName": "Simple Call Blocker"
+    "appName": "Stop Appels",
+    "privacyPolicy": "Politique de confidentialité",
+    "termsConditions": "Conditions d'utilisation"
   }
 }
