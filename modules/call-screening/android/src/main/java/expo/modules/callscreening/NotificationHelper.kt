@@ -2,7 +2,10 @@ package expo.modules.callscreening
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
@@ -39,11 +42,14 @@ class NotificationHelper(private val context: Context) {
             android.R.drawable.ic_menu_call
         }
 
+        val contentIntent = buildFilteredCallsPendingIntent()
+
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(iconRes)
             .setContentTitle("Call Blocked")
             .setContentText("Blocked call from $phoneNumber (filter: $matchedFilter)")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(contentIntent)
             .setAutoCancel(true)
             .build()
 
@@ -52,5 +58,18 @@ class NotificationHelper(private val context: Context) {
         } catch (e: SecurityException) {
             // POST_NOTIFICATIONS permission not granted on Android 13+
         }
+    }
+
+    private fun buildFilteredCallsPendingIntent(): PendingIntent {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("callfilter:///log")).apply {
+            setPackage(context.packageName)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        return PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 }
